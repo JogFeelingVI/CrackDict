@@ -89,7 +89,7 @@ class anyargs:
 	def format_arg(self):
 		for k, v in self.__args.__dict__.items():
 			if v is not None:
-				self.args[k] = v.split(',') if v.find(',') !=-1 else v
+				self.args[k] = [x for x in v.split(',') if x != ''] if v.find(',') !=-1 else v
 				print('{:.<20}: {}'.format('[A]' + k, v))
 		
 		self.__args = list()
