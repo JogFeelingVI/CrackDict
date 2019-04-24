@@ -2,16 +2,16 @@
 ## hashCat -- CrackDict 中文拼音wifi密码字典 Python3 以上适用
 ### 基本功能,根据设定规则,生成字典文件
 
-↪ python3 ~/Downloads/CrackDict/CusList.py  -c1 zhang,zhao -l 1yyd
-[A]cus_1............: zhang,zhao
-[A]plan_list........: 1yyd
-[A]outfile..........: cuslist.lst
-Password length.....: [ 4 ]
-Total number........: 3,010,880
-Page size...........: 99,999
-Cpu Core............: 8
-Progress rate.......: 100.00% / zhaoyunyun9
-Time consuming......: 23.15s
+> ↪ python3 ~/Downloads/CrackDict/CusList.py  -c1 zhang,zhao -l 1yyd
+> [A]cus_1............: zhang,zhao
+> [A]plan_list........: 1yyd
+> [A]outfile..........: cuslist.lst
+> Password length.....: [ 4 ]
+> Total number........: 3,010,880
+> Page size...........: 99,999
+> Cpu Core............: 8
+> Progress rate.......: 100.00% / zhaoyunyun9
+> Time consuming......: 24.58s
 
 #### 参数介绍
 * -c1 -c1 abc
