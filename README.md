@@ -35,7 +35,7 @@ Time consuming......: 23.15s
   y 为所有简体中文的388个发音, 在-l yyy 即可生成所有简体中文中的三个字的名称！ -l yy 即可生成两个字的名字，也可以结合 -c[1-4]使用，来减少hashcatd的运行压力，制造更加精准的字典文件。例如 -c1 zhang,zhao,zhou -l 1yy 就只生成 zhangxxx zhaoxxx zhouxxx的字典
   
  #### 汉语拼音
- > ![汉语拼音总表的圖片搜尋結果](https://www.wendangwang.com/pic/9df35b1d7fad22bb2564573b/1-1080-jpg_6_0_______-1924-0-3-1924.jpg)
+ > ![汉语拼音总表的圖片搜尋結果](https://github.com/JogFeelingVI/CrackDict/blob/master/view.jpeg)
 
 #### Exp
 > _> python3 ~/Downloads/CrackDict/CusList.py  -c1 abc -l 111ddd
