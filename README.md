@@ -32,8 +32,9 @@
 * y = 共计388个汉语拼音
   
   > 这些列表 可以出现在-l 参数中,包括四个自定义栏位所代表的 1,2,3,4
-  p 为所有中文发音的声母首字母，所以 zh ch sh 不包含在内,用到的时候可以自定义 -c1 zh,ch,sh
-  y 为所有简体中文的388个发音, 在-l yyy 即可生成所有简体中文中的三个字的名称！ -l yy 即可生成两个字的名字，也可以结合 -c[1-4]使用，来减少hashcatd的运行压力，制造更加精准的字典文件。例如 -c1 zhang,zhao,zhou -l 1yy 就只生成 zhangxxx zhaoxxx zhouxxx的字典
+  p 为所有中文发音的声母首字母.
+  y 为所有简体中文的388个发音.
+  在-l yyy 即可生成所有简体中文中的三个字的名称！ -l yy 即可生成两个字的名字，也可以结合 -c[1-4]使用，来减少hashcatd的运行时间，制造更加精准的字典文件。例如 -c1 zhang,zhao,zhou -l 1yy 就只生成 zhangxxx zhaoxxx zhouxxx的字典
   
  #### 汉语拼音
  > ![汉语拼音总表的圖片搜尋結果](https://github.com/JogFeelingVI/CrackDict/blob/master/view.jpeg)
