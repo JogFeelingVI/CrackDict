@@ -15,6 +15,9 @@ import time
 
 
 class Sx(enum.Enum):
+    M = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+    D = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+         '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
     d = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     s = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c',
          'v', 'b', 'n', 'm']
@@ -55,7 +58,7 @@ class anyargs:
     __func = None
     __args = None
     __Stdx = {'1': 'cus_1', '2': 'cus_2', '3': 'cus_3', '4': 'cus_4', 'd': Sx.d.value, 's': Sx.s.value, 'S': Sx.S.value,
-              'f': Sx.f.value, 'p': Sx.p.value, 'y': Sx.y.value}
+              'f': Sx.f.value, 'p': Sx.p.value, 'y': Sx.y.value, 'M': Sx.M.value, 'D': Sx.D.value}
 
     def __init__(self):
         parg = argparse.ArgumentParser(prog='CusList.py', description='Cuslist by FeelingVi 1.2', usage='lifelse')
@@ -83,15 +86,14 @@ class anyargs:
         gs.flush()
         gl.release()
 
-    def __Ptostr(self, x:list) -> str:
+    def __Ptostr(self, x: list) -> str:
         # 列表转化为字符串
         fx = '{}' * x.__len__()
         fx = fx.format(*x)
         fx = fx if fx.__len__() >= int(self.args['password_min']) else ''
         return fx
 
-
-    def fix_2(self, pl:list):
+    def fix_2(self, pl: list):
         sTime = time.time()
         rn = [''.join(map(str, x)) for x in pl]
         self.sav_2(rn)
@@ -162,7 +164,7 @@ class Generate_list:
         ex = [list({i.__len__() for i in p}) for p in pl]
         ex = list(iters.product(*ex))
         ex = {sum(x) for x in ex}
-        return str(min(ex)) if ex.__len__() == 1 else '{} ~ {}'.format(min(ex),max(ex))
+        return str(min(ex)) if ex.__len__() == 1 else '{} ~ {}'.format(min(ex), max(ex))
 
 
 class Save_data:

@@ -24,6 +24,8 @@
 * --psmin 设置最小密码长度, 默认值8 小于最小密码长度的密码将被抛弃,因为 wifi 最小长度为8 最大为64
 
 #### 内置列表
+* M  1-12 月份 单数字 双位数请使用 dd 生成
+* D  1-31 天数 单数字 双位数请使用 dd 生成
 * d  '0123456789'
 * s  'qwertyuiopasdfghjklzxcvbnm'
 * S  'QWERTYUIOPASDFGHJKLZXCVBNM'
