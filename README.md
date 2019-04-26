@@ -24,19 +24,19 @@
 * --psmin 设置最小密码长度, 默认值8 小于最小密码长度的密码将被抛弃,因为 wifi 最小长度为8 最大为64
 
 #### 内置列表
-* d = list('0123456789')
-* s = list('qwertyuiopasdfghjklzxcvbnm') # 按照键盘排列 更容易猜解出密码
-* S = list('QWERTYUIOPASDFGHJKLZXCVBNM')
-* f = list('`~!@#$%^&*()_-+=[]{}\|;:'",<.>/?") # 包含 空格键
-* p = list('bpmfdtnlgkhjqxrzcs') # 汉语拼音中的声母 国人wifi常用内容,
-* y = 共计388个汉语拼音
+* d  '0123456789'
+* s  'qwertyuiopasdfghjklzxcvbnm'
+* S  'QWERTYUIOPASDFGHJKLZXCVBNM'
+* f  '`~!@#$%^&*()_-+=[]{}\|;:'",<.>/?"
+* p  'bpmfdtnlgkhjqxrzcs'
+* y  共计388个汉语拼音
   
   > 这些列表 可以出现在-l 参数中,包括四个自定义栏位所代表的 1,2,3,4
   p 为所有中文发音的声母首字母.
   y 为所有简体中文的388个发音.
   在-l yyy 即可生成所有简体中文中的三个字的名称！ -l yy 即可生成两个字的名字，也可以结合 -c[1-4]使用，来减少hashcatd的运行时间，制造更加精准的字典文件。例如 -c1 zhang,zhao,zhou -l 1yy 就只生成 zhangxxx zhaoxxx zhouxxx的字典
   
- #### 汉语拼音
+#### 汉语拼音
  > ![汉语拼音总表的圖片搜尋結果](https://github.com/JogFeelingVI/CrackDict/blob/master/view.jpeg)
 
 #### Exp
