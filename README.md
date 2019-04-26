@@ -3,7 +3,7 @@
 ### 基本功能,根据设定规则,生成字典文件
 
 * ↪ python3 ~/Downloads/CrackDict/CusList.py  -c1 zhang,zhao -l 1yyd
-* *[A]cus_1............: zhang,zhao
+* [A]cus_1............: zhang,zhao
 * [A]plan_list........: 1yyd
 * [A]outfile..........: cuslist.lst
 * Password length.....: [ 4 ]
