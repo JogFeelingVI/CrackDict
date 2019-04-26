@@ -68,7 +68,8 @@ class anyargs:
         parg.add_argument('-c4', dest='cus_4', help='Custom parameter', type=str)
         parg.add_argument('-l', dest='plan_list', help='-l 123dS4d', type=str, default='Sssddddd')
         parg.add_argument('-o', dest='outfile', help='-o ~/Download/file.lst', type=str, default='cuslist.lst')
-        parg.add_argument('--psmin', dest='password_min', help='Minimum password length', type=str, default='8')
+        parg.add_argument('--psmin', dest='password_min', help='Minimum password length', type=int, default=8)
+        parg.add_argument('--addz', dest='add_zero', help='Digital supplement 0', action='store_true')
         self.__args = parg.parse_args()
         self.args = {'username': 'JogFeelingVi'}
 
@@ -105,15 +106,25 @@ class anyargs:
         sys.stdout.write(pbar)
         sys.stdout.flush()
 
+    def __parsing(self, v):
+        Vx = {
+            str :lambda x:[x for x in v.split(',') if x != ''] if str(v).find(',') != -1 else v,
+            int :lambda x:x,
+            bool:lambda x:x
+        }
+        return Vx.get(type(v))(v)
+
     def format_arg(self):
         for k, v in self.__args.__dict__.items():
             if v is not None:
-                self.args[k] = [x for x in v.split(',') if x != ''] if v.find(',') != -1 else v
+                self.args[k] = self.__parsing(v)
                 print('{:.<20}: {}'.format('[A]' + k, v))
 
         self.__args = list()
         for x in list(self.args['plan_list']):
             vx = self.__Stdx.get(x)
+            if x in ['M', 'D'] and self.args['add_zero']:
+                vx = ['{:0>2}'.format(i) for i in vx]
             vx = vx if type(vx) == list else list(self.args.get(vx))
             self.__args.append(vx)
         glist = Generate_list(*self.__args)
