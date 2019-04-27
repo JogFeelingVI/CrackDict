@@ -68,8 +68,8 @@ class anyargs:
         parg.add_argument('-c4', dest='cus_4', help='Custom parameter', type=str)
         parg.add_argument('-l', dest='plan_list', help='-l 123dS4d', type=str, default='Sssddddd')
         parg.add_argument('-o', dest='outfile', help='-o ~/Download/file.lst', type=str, default='cuslist.lst')
-        parg.add_argument('--psmin', dest='password_min', help='Minimum password length', type=int, default=8)
-        parg.add_argument('--addz', dest='add_zero', help='Digital supplement 0', action='store_true')
+        parg.add_argument('-psmin', dest='password_min', help='Minimum password length', type=int, default=8)
+        parg.add_argument('-addz', dest='add_zero', help='Digital supplement 0', action='store_true')
         self.__args = parg.parse_args()
         self.args = {'username': 'JogFeelingVi'}
 
