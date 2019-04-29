@@ -26,6 +26,7 @@ class Sx(enum.Enum):
     f = ['`', '~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '-', '+', '=', '[', ']', '{', '}', '\\', '|',
          ';', ':', ',', '<', '.', '>', '/', '?', ' ']
     p = ['b', 'p', 'm', 'f', 'd', 't', 'n', 'l', 'g', 'k', 'h', 'j', 'q', 'x', 'r', 'z', 'c', 's', 'zh', 'ch', 'sh']
+    P = ['B', 'P', 'M', 'F', 'D', 'T', 'N', 'L', 'G', 'K', 'H', 'J', 'Q', 'X', 'R', 'Z', 'C', 'S', 'Zh', 'Ch', 'Sh']
     y = ['ba', 'pa', 'ma', 'fa', 'da', 'tu', 'na', 'la', 'ga', 'ka', 'ha', 'zha', 'cha', 'sha', 'za', 'ca', 'sa', 'a',
          'bo', 'po', 'mo', 'fo', 'o', 'me', 'de', 'te', 'ne', 'le', 'ge', 'ke', 'he', 'zhe', 'che', 'she', 're', 'ze',
          'ce', 'se', 'e', 'zhi', 'chi', 'shi', 'ri', 'zi', 'ci', 'si', 'er', 'bai', 'pai', 'mai', 'dai', 'tai', 'nai',
@@ -58,7 +59,7 @@ class anyargs:
     __func = None
     __args = None
     __Stdx = {'1': 'cus_1', '2': 'cus_2', '3': 'cus_3', '4': 'cus_4', 'd': Sx.d.value, 's': Sx.s.value, 'S': Sx.S.value,
-              'f': Sx.f.value, 'p': Sx.p.value, 'y': Sx.y.value, 'M': Sx.M.value, 'D': Sx.D.value}
+              'f': Sx.f.value, 'p': Sx.p.value, 'y': Sx.y.value, 'M': Sx.M.value, 'D': Sx.D.value, 'P': Sx.P.value}
 
     def __init__(self):
         parg = argparse.ArgumentParser(prog='CusList.py', description='Cuslist by FeelingVi 1.2', usage='lifelse')
