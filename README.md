@@ -20,4 +20,4 @@
     hashcat -m 2500 -a 0 ./xxx.hccapx cuslist.lst`
 
 
-`CrackDict Wiki [Click Me](https://github.com/JogFeelingVI/CrackDict/wiki)`
+`CrackDict Wiki` [Click Me](https://github.com/JogFeelingVI/CrackDict/wiki)
