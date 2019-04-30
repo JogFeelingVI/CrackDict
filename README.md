@@ -1,52 +1,22 @@
 # CrackDict
-## hashCat -- CrackDict 中文拼音wifi密码字典 Python3 以上适用
-### 基本功能,根据设定规则,生成字典文件
+## hashCat -- CrackDict 中文拼音wifi密码字典生成工具 Python3 以上适用
+### 基本功能,根据设定规则,生成字典文件适用与数字密码、英文密码、汉语拼音密码等，是hashcat的掩码功能拓展
 
-* ↪ python3 ~/Downloads/CrackDict/CusList.py  -c1 zhang,zhao -l 1yyd
-* [A]cus_1............: zhang,zhao
-* [A]plan_list........: 1yyd
+
+·
+* ↪ python3 ~/Downloads/CrackDict/CusList.py -c1 zhaoyanhua,zhangjie -c2 0123456789x -l 1MD                             06:48:26
+* [A]cus_1............: zhaoyanhua,zhangjie
+* [A]cus_2............: 0123456789x
+* [A]plan_list........: 1MD
 * [A]outfile..........: cuslist.lst
-* Password length.....: [ 4 ]
-* Total number........: 3,010,880
+* [A]password_min.....: 8
+* [A]add_zero.........: False
+* Password length.....: [ 10 ~ 14 ]
+* Total number........: 744
 * Page size...........: 99,999
-* Cpu Core............: 8
-* Progress rate.......: 100.00% / zhaoyunyun9
-* Time consuming......: 24.58s
+* Cpu Core............: 4
+* Progress rate.......: 100.00% / zhangjie1231
+* Time consuming......: 0.00s
 
-#### 参数介绍
-* -c1 -c1 abc
-* -c2 -c2 xyz
-* -c3 -c3 ...
-* -c4 -c4 ...
-> 对字典设置自定义数据,以供生产字典文件
-* -l 生成字典文件的规则 默认值 Sssddddd, -c1 abc 在-l 规则中对应 1.2.3.4 注意 大小写敏感
-* -o 字典文件文件名, 默认值 ./cuslist.lst
-* -psmin 设置最小密码长度, 默认值8 小于最小密码长度的密码将被抛弃,因为 wifi 最小长度为8 最大为64
-* -addz 自动为M D 小于两位数的补零 1, 2, 3...11 -> 01, 02, 03...11
-
-#### 内置列表
-* M  1-12 月份 1,2,3,4,5,6,7,8,9,10,11,12 可以使用 -addz 让数字自动补零
-* D  1-31 天数 1,2,3,4...20...30,31 -addz 让数字自动补零
-* d  '0123456789'
-* s  'qwertyuiopasdfghjklzxcvbnm'
-* S  'QWERTYUIOPASDFGHJKLZXCVBNM'
-* f  '`~!@#$%^&*()_-+=[]{}\|;:'",<.>/?"
-* p  'bpmfdtnlgkhjqxrzcs'
-* y  共计388个汉语拼音
-  
-  > 这些列表 可以出现在-l 参数中,包括四个自定义栏位所代表的 1,2,3,4
-  p 为所有中文发音的声母首字母.
-  y 为所有简体中文的388个发音.
-  在-l yyy 即可生成所有简体中文中的三个字的名称！ -l yy 即可生成两个字的名字，也可以结合 -c[1-4]使用，来减少hashcatd的运行时间，制造更加精准的字典文件。例如 -c1 zhang,zhao,zhou -l 1yy 就只生成 zhangxxx zhaoxxx zhouxxx的字典
-  
-#### 汉语拼音
- > ![汉语拼音总表的圖片搜尋結果](https://github.com/JogFeelingVI/CrackDict/blob/master/view.jpeg)
-
-#### Exp
-> _> python3 ~/Downloads/CrackDict/CusList.py  -c1 abc -l 111ddd
-设定了自定义-c1 为 abc 在-l 中前三位密码使用了 -c1 abc,后三位密码为数字【0-9】生成的密码为 aaa000 -> ccc999
-
-> _> python3 ~/Downloads/CrackDict/CusList.py  -c1 abc, -l 1ddd
-以上面命令基本相似，但是abc后面多了一个‘，’逗号,使得abc被识别为一个词，而不是一个列表，生成的密码为abc000 -> abc999
-
-> 使用方法类似于 hashcat 的掩码,区别在于掩码不同,但使用方法一样！
+* hashcat -m 2500 -a 0 ./xxx.hccapx cuslist.lst
+·
