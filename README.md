@@ -3,7 +3,7 @@
 ### 基本功能,根据设定规则,生成字典文件适用与数字密码、英文密码、汉语拼音密码等，是hashcat的掩码功能拓展
 
 
-·
+`
 * ↪ python3 ~/Downloads/CrackDict/CusList.py -c1 zhaoyanhua,zhangjie -c2 0123456789x -l 1MD                             06:48:26
 * [A]cus_1............: zhaoyanhua,zhangjie
 * [A]cus_2............: 0123456789x
@@ -18,5 +18,7 @@
 * Progress rate.......: 100.00% / zhangjie1231
 * Time consuming......: 0.00s
 
-* hashcat -m 2500 -a 0 ./xxx.hccapx cuslist.lst
-·
+* hashcat -m 2500 -a 0 ./xxx.hccapx cuslist.lst`
+
+
+`CrackDict Wiki`
