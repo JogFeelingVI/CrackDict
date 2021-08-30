@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "crackdict"
+version = "0.1.0"
+description = "CrackDict for china"
+authors = ["JogFeelingVI <lifelse@outlook.com>"]
+license = "GPL3"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+yapf = "^0.31.0"
+toml = "^0.10.2"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
