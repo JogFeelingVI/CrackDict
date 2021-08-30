@@ -1,4 +1,3 @@
-test.py
 *.lst
 __pycache__
 *.py[cod]

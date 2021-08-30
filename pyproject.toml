@@ -9,6 +9,7 @@ license = "GPL3"
 python = "^3.9"
 yapf = "^0.31.0"
 toml = "^0.10.2"
+PyYAML = "^5.4.1"
 
 [tool.poetry.dev-dependencies]
 
