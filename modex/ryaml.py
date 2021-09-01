@@ -13,8 +13,9 @@ def readyaml(key:str = 's'):
     if (p:=pathx()) != None:
         with open(p) as plan:
             lis = yaml.full_load(plan).get('plans')
-            lis_v = lis[key]
-            tmp = [list(lis_v), lis_v.split(',')][key in 'MDh']
-            return tmp
+            if key in lis.keys():
+                lis_v = lis[key]
+                tmp = [list(lis_v), lis_v.split(',')][key in 'MDh']
+                return tmp
     else:
         print(f'plan.yaml Not Found')

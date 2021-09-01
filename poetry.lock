@@ -25,7 +25,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "838080a93eec47df3b5822726538319c55f3ff796d4296f8dbdb03aaad8c1563"
+content-hash = "1be3a51a6179103be4a92fbc413d9bdfc4f794403006a8556eda4737870d8010"
 
 [metadata.files]
 pyyaml = [

@@ -25,13 +25,13 @@ def main():
                          dest='out',
                          metavar='outfile',
                          default='./curlis.lst',
-                         help='save to file')
+                         help='save to file'),
     command.add_argument('--list',
                          action='store_true',
                          default=False,
                          help='List -p char')
     args = command.parse_args()
-    ccurls = core.curls(args=args)
+    ccurls = core.curls(args=args.__dict__)
     ccurls.Action()
 
 
