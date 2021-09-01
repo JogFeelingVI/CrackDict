@@ -4,12 +4,12 @@
 # @Author  : Lifelse (Lifelse@outlook.com)
 # @Link    : blog.sina.com.cn/lifelse
 # @Name    : test
-from modex import ryaml as rys
+from modex import rplan
 
 def main():
     plan = 'h'
-    vas = rys.readyaml(plan)
-    print(f' test {vas}')
+    vals = rplan.readplanforkey(plan)
+    print(vals)
 
 if __name__ == '__main__':
     main()

@@ -2,7 +2,7 @@
 # @Date: 2021-08-30 23:14:22
 # @Last Modified by:   By JogFeelingVi
 # @Last Modified time: 2021-08-30 23:14:22
-from . import ryaml
+from . import rplan
 from itertools import zip_longest, repeat, product
 from functools import reduce
 
@@ -20,17 +20,21 @@ class curls:
 
     @classmethod
     def __act_cust__(cls, l: list):
+        if l is None:
+            return
         curls.Custom = l
         print(f'Save Custom list {curls.Custom}, Use -p c!')
 
     @classmethod
     def __act_plan__(cls, S: str):
+        if S is None:
+            return
         plan = list(S)
         print(f'Number of password digits {len(plan)}')
         if curls.Custom != []:
-            lists = [[ryaml.readyaml(x), curls.Custom][x == 'c'] for x in plan]
+            lists = [[rplan.readplanforkey(x), curls.Custom][x == 'c'] for x in plan]
         else:
-            lists = [ryaml.readyaml(x) for x in plan]
+            lists = [rplan.readplanforkey(x) for x in plan]
         curls.Synthesis = product(*lists)
         # ('0', '1', '2', '7', '7', '5', '9', '7')
         lens = reduce(lambda x, y: x * y, [len(x) for x in lists])
@@ -41,7 +45,17 @@ class curls:
 
     @classmethod
     def __act_out__(cls, o: str):
-        pass
+        if curls.Synthesis is []:
+            return
+        else:
+            outf = rplan.pathx(o)
+            print(f'OutFile: {outf}')
+            #with outf.open()
+
+    @staticmethod
+    def jionStr(*lis):
+        fx = '{}' * lis.__len__()
+        return fx.format(*lis)
 
     @classmethod
     def __act_list__(cls, b: bool):
@@ -49,7 +63,7 @@ class curls:
             return
         plankeys = 'M,D,d,s,S,f,p,P'.split(',')
         for key in plankeys:
-            value = ','.join(ryaml.readyaml(key))
+            value = ','.join(rplan.readplanforkey(key))
             print(f'- {key} {value}')
         print('- h ba,pa,ma,fa,da,tu,na,la,ga,ka,ha,zha,cha...')
         print('- c Custom list, -c xxx yyy zzz')

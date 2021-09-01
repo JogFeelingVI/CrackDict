@@ -19,8 +19,7 @@ def main():
                          dest='plan',
                          metavar='plan list',
                          help='Combination method, def -p Pppddddd',
-                         type=str,
-                         default='Pppddddd')
+                         type=str)
     command.add_argument('-o',
                          dest='out',
                          metavar='outfile',
