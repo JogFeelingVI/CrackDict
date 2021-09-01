@@ -2,8 +2,16 @@
 ## hashCat -- CrackDict 中文拼音wifi密码字典生成工具 Python3 以上适用
 ### 基本功能,根据设定规则,生成字典文件适用与数字密码、英文密码、汉语拼音密码等，是hashcat的掩码功能拓展
 
+## Install
 
-     ↪ python3 ~/Downloads/CrackDict/CusList.py -c1 zhaoyanhua,zhangjie -c2 0123456789x -l 1MD                             06:48:26
+```
+chmod +x cdlis.command
+ln -s ./cdlis.command /usr/local/bin/cdlis
+```
+
+## Running effect
+
+     ↪ cdlis -c1 zhaoyanhua,zhangjie -c2 0123456789x -l 1MD                             06:48:26
     [A]cus_1............: zhaoyanhua,zhangjie
     [A]cus_2............: 0123456789x
     [A]plan_list........: 1MD
@@ -16,8 +24,10 @@
     Cpu Core............: 4
     Progress rate.......: 100.00% / zhangjie1231
     Time consuming......: 0.00s
-
+    
     hashcat -m 2500 -a 0 ./xxx.hccapx cuslist.lst`
 
+
+## wiki
 
 `CrackDict Wiki` [Click Me](https://github.com/JogFeelingVI/CrackDict/wiki)

@@ -8,7 +8,7 @@ import argparse
 
 
 def main():
-    command = argparse.ArgumentParser(prog='curlis',
+    command = argparse.ArgumentParser(prog='cdlis',
                                       description='WIFI Dict for china')
     command.add_argument('-c',
                          dest='cust',
@@ -32,6 +32,7 @@ def main():
                          help='List -p char')
     args = command.parse_args()
     ccurls = core.curls(args=args)
+    ccurls.Action()
 
 
 if __name__ == '__main__':

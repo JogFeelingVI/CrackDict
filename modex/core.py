@@ -6,3 +6,6 @@
 class curls:
     def __init__(self, args) -> None:
         print(args)
+
+    def Action(self):
+        pass
