@@ -10,22 +10,18 @@ ln -s ~/Downloads/cdlis.command /usr/local/bin/cdlis
 ```
 
 ## Running effect
-
-     ↪ cdlis -c1 zhaoyanhua,zhangjie -c2 0123456789x -l 1MD                             06:48:26
-    [A]cus_1............: zhaoyanhua,zhangjie
-    [A]cus_2............: 0123456789x
-    [A]plan_list........: 1MD
-    [A]outfile..........: cuslist.lst
-    [A]password_min.....: 8
-    [A]add_zero.........: False
-    Password length.....: [ 10 ~ 14 ]
-    Total number........: 744
-    Page size...........: 99,999
-    Cpu Core............: 4
-    Progress rate.......: 100.00% / zhangjie1231
-    Time consuming......: 0.00s
+```
+↪ cdlis -p Ppdddddd
+  Archives: {'var': 1.02, 'cust': None, 'plan': 'Ppdddddd', 'out': None, 'list': False}
+  Number of password digits {8}
+  Scope: Bb000000-Ss999999
+  Count: 324,000,000 Done!
+  OutFile: /Users/feeling/Downloads/crack_wifi/Zhao/Ss999999.lst
+  Progress: 445.52s [100.00%]
+  Write completion Use time 445.54 seconds File size 2847656.25kb
     
-    hashcat -m 2500 -a 0 ./xxx.hccapx cuslist.lst`
+  hashcat -m 2500 -a 0 ./xxx.hccapx cuslist.lst`
+```
 
 ## plan key
 
