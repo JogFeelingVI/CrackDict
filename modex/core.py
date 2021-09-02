@@ -5,6 +5,7 @@
 from . import rplan
 from itertools import zip_longest, repeat, product
 from functools import reduce
+import re
 
 
 class curls:
@@ -31,17 +32,29 @@ class curls:
     def __act_plan__(cls, S: str):
         if S is None:
             return
-        plan = list(S)
-        if curls.Custom != []:
-            lists = [[rplan.readplanforkey(x), curls.Custom][x == 'c']
-                     for x in plan]
-        else:
-            lists = [rplan.readplanforkey(x) for x in plan]
-        curls.Synthesis = product(*lists)
-        # ('0', '1', '2', '7', '7', '5', '9', '7')
-        curls.Count = reduce(lambda x, y: x * y, [len(x) for x in lists])
-        start = rplan.jionStr(*[x[0] for x in lists])
-        ends = rplan.jionStr(*[x[-1] for x in lists])
+        # add [3456789] {1}
+        GPS = []
+        plan_m = re.finditer('(\[([^\[\]]*)\])|([TMDdSspPfhc])', S)
+        for m in plan_m:
+            x, y = m.span()
+            if y - x > 1:
+                # []
+                kh = m.string[x:y].replace('[', '').replace(']','')
+                GPS.append([f'{x}' for x in kh])
+                # end
+            elif y - x == 1:
+                # TMDdSspPfhc
+                cl = m.string[x:y]
+                GPS.append([rplan.readplanforkey(cl), curls.Custom][cl == 'c'])
+                # end
+            else:
+                return
+        # mksnumber        
+        curls.Synthesis = product(*GPS)
+        ('0', '1', '2', '7', '7', '5', '9', '7')
+        curls.Count = reduce(lambda x, y: x * y, [len(x) for x in GPS])
+        start = rplan.jionStr(*[x[0] for x in GPS])
+        ends = rplan.jionStr(*[x[-1] for x in GPS])
         lse = {len(start), len(ends)}
         print(f'Number of password digits {lse}')
         print(f'Scope: {start}-{ends}')
@@ -59,11 +72,12 @@ class curls:
             #rplan.wfilefor(outf, curls.Synthesis)
             wplan = rplan.wfileplus(outf, curls.Synthesis, curls.Count)
             wplan.writels()
+
     @classmethod
     def __act_list__(cls, b: bool):
         if b == False:
             return
-        plankeys = 'M,D,d,s,S,f,p,P'.split(',')
+        plankeys = 'M,D,d,s,S,f,p,P,T'.split(',')
         for key in plankeys:
             value = ','.join(rplan.readplanforkey(key))
             print(f'- {key} {value}')
