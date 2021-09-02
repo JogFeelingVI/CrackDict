@@ -12,8 +12,8 @@ then
     rm -rf "$PDIR"
 fi
 git clone 'https://github.com/ls0f/phone.git' $PDIR
-cp -R "$PDIR/phone/phone.dat" ./phone/phone.dat
-cp -R "$PDIR/phone/phone.py" ./phone/phone.py
-cp -R "$PDIR/phone/test_phone.py" ./phone/test_phone.py
-cp -R "$PDIR/README.md" ./phone/README.md
+cp -R "$PDIR/phone/phone.dat" ./phonedat/phone.dat
+cp -R "$PDIR/phone/phone.py" ./phonedat/phone.py
+cp -R "$PDIR/phone/test_phone.py" ./phonedat/test_phone.py
+cp -R "$PDIR/README.md" ./phonedat/README.md
 echo "Update completed"

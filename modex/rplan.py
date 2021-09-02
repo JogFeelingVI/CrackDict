@@ -78,4 +78,4 @@ class wfileplus:
                     print(f'\rProgress: {tmpt}s [{i/self.total*100:.2f}%]', end='')
         ust = f'{time.time() - STN:.2f} seconds'
         size = f'{self.file.stat().st_size/1024.0:.2f}kb'
-        print(f'Write completion Use time {ust} File size {size}')
+        print(f'\nWrite completion Use time {ust} File size {size}')
