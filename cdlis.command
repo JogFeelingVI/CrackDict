@@ -23,7 +23,6 @@ def main():
     command.add_argument('-o',
                          dest='out',
                          metavar='outfile',
-                         default='./curlis.lst',
                          help='save to file'),
     command.add_argument('--list',
                          action='store_true',

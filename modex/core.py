@@ -10,7 +10,9 @@ from functools import reduce
 class curls:
     Archives = {'var': 1.02}
     Custom = []
-    Synthesis = []
+    Synthesis = None
+    nName = ''
+    Count = 0
     __act_dict = {
         'cust': lambda l: curls.__act_cust__(l),
         'plan': lambda p: curls.__act_plan__(p),
@@ -30,33 +32,33 @@ class curls:
         if S is None:
             return
         plan = list(S)
-        print(f'Number of password digits {len(plan)}')
         if curls.Custom != []:
-            lists = [[rplan.readplanforkey(x), curls.Custom][x == 'c'] for x in plan]
+            lists = [[rplan.readplanforkey(x), curls.Custom][x == 'c']
+                     for x in plan]
         else:
             lists = [rplan.readplanforkey(x) for x in plan]
         curls.Synthesis = product(*lists)
         # ('0', '1', '2', '7', '7', '5', '9', '7')
-        lens = reduce(lambda x, y: x * y, [len(x) for x in lists])
-        start = ''.join([f'{x[0]}' for x in lists])
-        ends = ''.join([f'{x[-1]}' for x in lists])
+        curls.Count = reduce(lambda x, y: x * y, [len(x) for x in lists])
+        start = rplan.jionStr(*[x[0] for x in lists])
+        ends = rplan.jionStr(*[x[-1] for x in lists])
+        lse = {len(start), len(ends)}
+        print(f'Number of password digits {lse}')
         print(f'Scope: {start}-{ends}')
-        print(f'Count: {lens:,} Done!')
+        curls.nName = f'{ends}'
+        print(f'Count: {curls.Count:,} Done!')
 
     @classmethod
     def __act_out__(cls, o: str):
-        if curls.Synthesis is []:
+        if curls.Synthesis is None:
             return
         else:
-            outf = rplan.pathx(o)
+            path = f'./{curls.nName}.lst' if o is None else o
+            outf = rplan.pathx(path)
             print(f'OutFile: {outf}')
-            #with outf.open()
-
-    @staticmethod
-    def jionStr(*lis):
-        fx = '{}' * lis.__len__()
-        return fx.format(*lis)
-
+            #rplan.wfilefor(outf, curls.Synthesis)
+            wplan = rplan.wfileplus(outf, curls.Synthesis, curls.Count)
+            wplan.writels()
     @classmethod
     def __act_list__(cls, b: bool):
         if b == False:

@@ -4,12 +4,12 @@
 # @Author  : Lifelse (Lifelse@outlook.com)
 # @Link    : blog.sina.com.cn/lifelse
 # @Name    : test
-from modex import rplan
+import itertools
 
 def main():
-    plan = 'h'
-    vals = rplan.readplanforkey(plan)
-    print(vals)
+    x = itertools.count(start=0, step=1)
+    while True:
+        print(x())
 
 if __name__ == '__main__':
     main()
