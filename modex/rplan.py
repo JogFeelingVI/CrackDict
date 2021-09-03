@@ -77,7 +77,6 @@ class wfileplus:
         with self.file.open(mode='w+', encoding='utf-8',
                             buffering=4096) as wfs:
             for i, xL in self.fromtlis():
-                print(f'debug: {i} {xL}')
                 if xL not in [
                         'NULL',
                 ]:
