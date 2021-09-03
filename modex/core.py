@@ -9,7 +9,7 @@ import re
 
 
 class curls:
-    Archives = {'var': 1.02, 'minpw': 8}
+    Archives = {'var': 1.02,}
     Custom = []
     Synthesis = None
     nName = ''

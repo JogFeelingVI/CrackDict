@@ -43,6 +43,7 @@ def main():
     command.add_argument('--minpw',
                          default=8,
                          type=int,
+                         metavar='',
                          help='Minimum password length')
     args = command.parse_args()
     ccurls = core.curls(args=args.__dict__)
