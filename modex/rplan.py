@@ -49,12 +49,13 @@ class wfileplus:
     total = 0
     Minimum = 8
 
-    def __init__(self, file: plib.PosixPath, xlis: itertools.product, total:int) -> None:
+    def __init__(self, file: plib.PosixPath, xlis: itertools.product,
+                 total: int) -> None:
         self.file = file
         self.xist = xlis
         self.total = total
 
-    def minpw(self, Vx:int=-1):
+    def minpw(self, Vx: int = -1):
         if Vx == -1:
             return self.Minimum
         else:
@@ -69,7 +70,6 @@ class wfileplus:
     def fromtlis(self) -> list:
         for i, x in enumerate(self.xist):
             yield [i, self.jionStr(*x)]
-        return 'ENDOF'
 
     def writels(self):
         buffer, count, bs, save = list(), 0, 50000, 0
@@ -77,16 +77,21 @@ class wfileplus:
         with self.file.open(mode='w+', encoding='utf-8',
                             buffering=4096) as wfs:
             for i, xL in self.fromtlis():
-                if xL not in ['NULL', 'ENDOF']:
+                print(f'debug: {i} {xL}')
+                if xL not in [
+                        'NULL',
+                ]:
                     buffer.append(f'{xL}\n')
                     save += 1
                     count += 1
-                if count == bs or xL == 'ENDOF':
+                if count == bs or self.total - i == 1:
                     wfs.writelines(buffer)
                     count = 0
                     buffer.clear()
                     tmpt = f'{time.time()-STN:.2f}'
-                    print(f'\rProgress: {save/10000:,}xW {tmpt}s [{i/self.total*100:.2f}%]', end='')
+                    print(
+                        f'\rProgress: {save/10000:,}xW {tmpt}s [{i/self.total*100:.2f}%]',
+                        end='')
         ust = f'{time.time() - STN:.2f} seconds'
         size = f'{self.file.stat().st_size/1024.0:.2f}kb'
         print(f'\nWrite completion Use time {ust} File size {size}')
