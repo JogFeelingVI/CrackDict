@@ -56,7 +56,7 @@ ln -s ./cdlis.command /usr/local/bin/cdlis
 
 > 解析 [zZ]汉字张、郑等汉字首字母,ss 英语26个字母的小写形式，d为数字
 
-**9.如何生车YYYYMMDD格式密码**
+**9.如何生成YYYYMMDD格式密码**
 
 * ·cdlis -c 19 20 -p c[0126789]d[01]d[0123]d·
 

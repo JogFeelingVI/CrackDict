@@ -4,6 +4,7 @@
 # @Last Modified time: 2021-08-31 00:18:17
 import enum, pathlib as plib
 import itertools, time
+import re
 
 
 class plan(enum.Enum):
@@ -46,37 +47,46 @@ class wfileplus:
     file = None
     xist = None
     total = 0
+    Minimum = 8
 
     def __init__(self, file: plib.PosixPath, xlis: itertools.product, total:int) -> None:
         self.file = file
         self.xist = xlis
         self.total = total
 
-    @staticmethod
-    def jionStr(*lis):
+    def minpw(self, Vx:int=-1):
+        if Vx == -1:
+            return self.Minimum
+        else:
+            self.Minimum = Vx
+            return self.Minimum
+
+    def jionStr(self, *lis):
         fx = '{}' * lis.__len__()
-        return fx.format(*lis)
+        fxs = fx.format(*lis)
+        return fxs if len(fxs) >= self.minpw() else 'NULL'
 
     def fromtlis(self) -> list:
         for i, x in enumerate(self.xist):
-            yield [i, f'{self.jionStr(*x)}\n']
+            yield [i, self.jionStr(*x)]
         return 'ENDOF'
 
     def writels(self):
-        buffer, count, bs = list(), 0, 50000
+        buffer, count, bs, save = list(), 0, 50000, 0
         STN = time.time()
         with self.file.open(mode='w+', encoding='utf-8',
                             buffering=4096) as wfs:
             for i, xL in self.fromtlis():
-                if xL != 'ENDOF':
-                    buffer.append(xL)
+                if xL not in ['NULL', 'ENDOF']:
+                    buffer.append(f'{xL}\n')
+                    save += 1
                     count += 1
                 if count == bs or xL == 'ENDOF':
                     wfs.writelines(buffer)
                     count = 0
                     buffer.clear()
                     tmpt = f'{time.time()-STN:.2f}'
-                    print(f'\rProgress: {tmpt}s [{i/self.total*100:.2f}%]', end='')
+                    print(f'\rProgress: {save/10000:,}xW {tmpt}s [{i/self.total*100:.2f}%]', end='')
         ust = f'{time.time() - STN:.2f} seconds'
         size = f'{self.file.stat().st_size/1024.0:.2f}kb'
         print(f'\nWrite completion Use time {ust} File size {size}')

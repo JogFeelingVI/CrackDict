@@ -23,11 +23,27 @@ def main():
     command.add_argument('-o',
                          dest='out',
                          metavar='outfile',
-                         help='save to file'),
+                         help='Save to file'),
     command.add_argument('--list',
                          action='store_true',
                          default=False,
                          help='List -p char')
+    command.add_argument('--dual-m',
+                         action='store_true',
+                         default=False,
+                         help='M Parsed as MM 1 -> 01')
+    command.add_argument('--dual-d',
+                         action='store_true',
+                         default=False,
+                         help='D Parsed as DD 2 -> 02')
+    command.add_argument('--dual-md',
+                         action='store_true',
+                         default=False,
+                         help='--dual-m and --dual-d')
+    command.add_argument('--minpw',
+                         default=8,
+                         type=int,
+                         help='Minimum password length')
     args = command.parse_args()
     ccurls = core.curls(args=args.__dict__)
     ccurls.Action()
