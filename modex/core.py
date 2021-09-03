@@ -134,7 +134,7 @@ class curls:
     def InitializationPlan(self):
         plan_d = rplan.plan.__members__
         for k, v in plan_d.items():
-            if k in 'MDh':
+            if k in 'MDhH':
                 tmp = v.value.split(',')
             else:
                 tmp = list(v.value)
