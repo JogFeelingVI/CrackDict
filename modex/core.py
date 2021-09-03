@@ -72,7 +72,6 @@ class curls:
                 # []
                 #kh = m.string[x:y].replace('[', '').replace(']','')
                 kh = m.string[x:y][1:-1]
-                print(kh)
                 GPS.append([f'{x}' for x in kh])
                 # end
             elif y - x == 1:
