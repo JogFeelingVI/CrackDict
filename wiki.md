@@ -28,6 +28,7 @@ ln -s ./cdlis.command /usr/local/bin/cdlis
 * p = b,p,m,f,d,t,n,l,g,k,h,j,q,x,r,z,c,s # 汉语拼音中的声母
 * P = p 的大写形式
 * h = 388个汉语发音 例如 zhanghaoran|张浩然
+* H = 388个汉语发音的首字母大写形式
 * T = 3,4,5,6,7,8,9 中国手机号码第二位数字
 
 **5.运行参数** 

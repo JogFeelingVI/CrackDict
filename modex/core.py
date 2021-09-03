@@ -65,7 +65,7 @@ class curls:
             return
         # add [3456789] {1}
         GPS = []
-        plan_m = re.finditer('(\[([^\[\]]*)\])|([TMDdSspPfhc])', S)
+        plan_m = re.finditer('(\[([^\[\]]*)\])|([TMDdSspPfhcH])', S)
         for m in plan_m:
             x, y = m.span()
             if y - x > 1:
@@ -120,7 +120,8 @@ class curls:
         for key in plankeys:
             value = ','.join(rplan.readplanforkey(key))
             print(f'- {key} {value}')
-        print('- h ba,pa,ma,fa,da,tu,na,la,ga,ka,ha,zha,cha...')
+        print('- h ba,pa,ma,fa,da,tu...')
+        print('- H Ba,Zhang,Zhao,Yun...')
         print('- c Custom list, -c xxx yyy zzz')
 
     @classmethod
