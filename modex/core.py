@@ -9,58 +9,62 @@ import re
 
 
 class curls:
-    Archives = {'var': 1.02,}
+    Archives = {
+        'var': 1.02,
+    }
     Custom = []
+    fmu = []
     Synthesis = None
     nName = ''
     Count = 0
-    Dataforplan = {'plam': 'TMDsSpPhf'}
+    Dataforplan = {'plan': 'TMDsSpPhHf'}
 
     __act_dict = {
-        'cust': lambda l: curls.__act_cust__(l),
-        'plan': lambda p: curls.__act_plan__(p),
-        'out': lambda o: curls.__act_out__(o),
-        'list': lambda b: curls.__act_list__(b),
-        'dual_md': lambda m: curls.__act_dual_md__(m),
-        'dual_m': lambda m: curls.__act_dual_m__(m),
-        'dual_d': lambda m: curls.__act_dual_d__(m),
-        'minpw': lambda d: curls.__act_minpw__(d),
+        'cust': lambda s, l: curls.__act_cust__(s, l),
+        'plan': lambda s, p: curls.__act_plan__(s, p),
+        'out': lambda s, o: curls.__act_out__(s, o),
+        'list': lambda s, b: curls.__act_list__(s, b),
+        'dual_md': lambda s, m: curls.__act_dual_md__(s, m),
+        'dual_m': lambda s, m: curls.__act_dual_m__(s, m),
+        'dual_d': lambda s, m: curls.__act_dual_d__(s, m),
+        'minpw': lambda s, d: curls.__act_minpw__(s, d),
+        'fmu': lambda s, l: curls.__act_fmu__(s, l),
     }
 
-    @classmethod
-    def __act_dual_m__(cls, m:bool):
-        if m == False:
-            return
-        tmp = [f'{int(m):02}' for m in curls.Dataforplan['M']]
-        curls.Dataforplan['M'] = tmp
-
-    @classmethod
-    def __act_dual_d__(cls, m:bool):
-        if m == False:
-            return
-        tmp = [f'{int(m):02}' for m in curls.Dataforplan['D']]
-        curls.Dataforplan['D'] = tmp
-
-    @classmethod
-    def __act_dual_md__(cls, m:bool):
-        if m == False:
-            return
-        cls.__act_dual_m__(True)
-        cls.__act_dual_d__(True)
-
-    @classmethod
-    def __act_minpw__(cls, d:int):
-        curls.Archives['minpw'] = d
-
-    @classmethod
-    def __act_cust__(cls, l: list):
+    def __act_fmu__(self, l: list):
         if l is None:
             return
-        curls.Custom = l
-        print(f'Save Custom list {curls.Custom}, Use -p c!')
+        self.fmu = l
+        print(f'Save fmu {self.fmu} --fmu 442000 027')
 
-    @classmethod
-    def __act_plan__(cls, S: str):
+    def __act_dual_m__(self, m: bool):
+        if m == False:
+            return
+        tmp = [f'{int(m):02}' for m in self.Dataforplan['M']]
+        self.Dataforplan['M'] = tmp
+
+    def __act_dual_d__(self, m: bool):
+        if m == False:
+            return
+        tmp = [f'{int(m):02}' for m in self.Dataforplan['D']]
+        self.Dataforplan['D'] = tmp
+
+    def __act_dual_md__(self, m: bool):
+        if m == False:
+            return
+        self.__act_dual_m__(True)
+        self.__act_dual_d__(True)
+
+    def __act_minpw__(self, d: int):
+        self.Archives['minpw'] = d
+
+    def __act_cust__(self, l: list):
+        if l is None:
+            return
+        self.Custom = l
+        print(f'Save Custom list {self.Custom}, Use -p c!')
+
+    def __act_plan__(self, S: str):
         if S is None:
             return
         # add [3456789] {1}
@@ -77,57 +81,60 @@ class curls:
             elif y - x == 1:
                 # TMDdSspPfhc
                 cl = m.string[x:y]
-                GPS.append([cls.rPlan(cl), curls.Custom][cl == 'c'])
+                GPS.append([self.rPlan(cl), self.Custom][cl == 'c'])
                 # end
             else:
                 return
         #('0', '1', '2', '7', '7', '5', '9', '7')
-        curls.Count = reduce(lambda x, y: x * y, [len(x) for x in GPS])
+        self.Count = reduce(lambda x, y: x * y, [len(x) for x in GPS])
         start = rplan.jionStr(*[x[0] for x in GPS])
         ends = rplan.jionStr(*[x[-1] for x in GPS])
         lse = {len(start), len(ends)}
-        minpw = curls.Archives['minpw']
+        minpw = self.Archives['minpw']
         # mksnumber
         bijiao = {True if x >= minpw else False for x in lse}
         if True in bijiao:
-            curls.Synthesis = product(*GPS)
+            self.Synthesis = product(*GPS)
             print(f'Number of password digits {lse}')
             print(f'Scope: {start}-{ends}')
-            curls.nName = f'{ends}'
-            print(f'Count: {curls.Count:,} Done!')
+            self.nName = f'{ends}'
+            print(f'Count: {self.Count:,} Done!')
         else:
-            print(f'minpw seting {minpw}, [ -p {S} ] Not eligible. Refer {lse}')
+            print(
+                f'minpw seting {minpw}, [ -p {S} ] Not eligible. Refer {lse}')
 
-    @classmethod
-    def __act_out__(cls, o: str):
-        if curls.Synthesis is None:
+    def __act_out__(self, o: str):
+        if self.Synthesis is None:
             return
         else:
-            path = f'./{curls.nName}.lst' if o is None else o
+            path = f'./{self.nName}.lst' if o is None else o
             outf = rplan.pathx(path)
             print(f'OutFile: {outf}')
             #rplan.wfilefor(outf, curls.Synthesis)
-            wplan = rplan.wfileplus(outf, curls.Synthesis, curls.Count)
-            minpw = curls.Archives['minpw']
+            wplan = rplan.wfileplus(outf, self.Synthesis, self.Count)
+            minpw = self.Archives['minpw']
+            if self.fmu != None and 'plus_fmu' in self.Archives.keys():
+                wplan.fmus(self.fmu, self.Archives['plus_fmu'])
+            else:
+                print('Plus_fmu Start Error!')
+            # wplan.fumc = {'fum': funcobj, 'args': [x, y, z]}
             print(f'Minimum password length {wplan.minpw(minpw)}')
             wplan.writels()
 
-    @classmethod
-    def __act_list__(cls, b: bool):
+    def __act_list__(self, b: bool):
         if b == False:
             return
         plankeys = 'M,D,d,s,S,f,p,P,T'.split(',')
         for key in plankeys:
-            value = ','.join(rplan.readplanforkey(key))
+            value = ','.join(self.rPlan(key))
             print(f'- {key} {value}')
         print('- h ba,pa,ma,fa,da,tu...')
         print('- H Ba,Zhang,Zhao,Yun...')
         print('- c Custom list, -c xxx yyy zzz')
 
-    @classmethod
-    def rPlan(cls, key:str):
-        if key in curls.Dataforplan.keys():
-            return curls.Dataforplan[key]
+    def rPlan(self, key: str):
+        if key in self.Dataforplan.keys():
+            return self.Dataforplan[key]
         else:
             return None
 
@@ -145,9 +152,9 @@ class curls:
         self.InitializationPlan()
         print(f'Archives: {self.Archives}')
 
-
     def Action(self):
-        Sequence = 'minpw,cust,dual_m,dual_d,dual_md,plan,out,list'.split(',')
+        Sequence = 'minpw,cust,fmu,dual_m,dual_d,dual_md,plan,out,list'.split(
+            ',')
         for Seq in Sequence:
             vals = self.Archives[Seq]
-            self.__act_dict[Seq](vals)
+            self.__act_dict[Seq](self, vals)

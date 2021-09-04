@@ -3,8 +3,8 @@
 # @Last Modified by:   By JogFeelingVi
 # @Last Modified time: 2021-08-31 00:18:17
 import enum, pathlib as plib
-import itertools, time
-import re
+import itertools, time, re
+from . import fmu
 
 
 class plan(enum.Enum):
@@ -21,16 +21,16 @@ class plan(enum.Enum):
     H = 'Ba,Pa,Ma,Fa,Da,Tu,Na,La,Ga,Ka,Ha,Zha,Cha,Sha,Za,Ca,Sa,A,Bo,Po,Mo,Fo,O,Me,De,Te,Ne,Le,Ge,Ke,He,Zhe,Che,She,Re,Ze,Ce,Se,E,Zhi,Chi,Shi,Ri,Zi,Ci,Si,Er,Bai,Pai,Mai,Dai,Tai,Nai,Lai,Gai,Kai,Hai,Zhai,Chai,Shai,Zai,Cai,Sai,Ai,Bei,Pei,Mei,Fei,Dei,Tei,Nei,Lei,Gei,Hei,Zhei,Shei,Zei,Ei,Bao,Pao,Mao,Dao,Tao,Nao,Lao,Gao,Kao,Hao,Zhao,Chao,Shao,Rao,Zao,Cao,Sao,Ao,Pou,Mou,Fou,Dou,Tou,Nou,Lou,Gou,Kou,Hou,Zhou,Chou,Shou,Rou,Zou,Cou,Sou,Ou,Ban,Pan,Man,Fan,Dan,Tan,Nan,Lan,Gan,Kan,Han,Zhan,Chan,Shan,Ran,Zan,Can,San,An,Ben,Pen,Men,Fen,Den,Nen,Gen,Ken,Hen,Zhen,Chen,Shen,Ren,Zen,Cen,Sen,En,Bang,Pang,Mang,Fang,Dang,Tang,Nang,Lang,Gang,Kang,Hang,Zhang,Chang,Shang,Rang,Zang,Cang,Sang,Ang,Dong,Tong,Nong,Long,Gong,Kong,Hong,Zhong,Chong,Rong,Zong,Cong,Song,Bi,Pi,Mi,Di,Ti,Ni,Li,Ji,Qi,Xi,Yi,Dia,Lia,Jia,Qia,Xia,Ya,Bie,Pie,Mie,Die,Tie,Nie,Lie,Jie,Qie,Xie,Ye,Biao,Piao,Miao,Diao,Tiao,Niao,Liao,Jiao,Qiao,Xiao,Yao,Miu,Diu,Niu,Liu,Jiu,Qiu,Xiu,You,Bian,Pian,Mian,Dian,Tian,Nian,Lian,Jian,Qian,Xian,Yan,Bin,Pin,Min,Nin,Lin,Jin,Qin,Xin,Yin,Niang,Liang,Jing,Qiang,Xiang,Yang,Bing,Ping,Ming,Ding,Ting,Ning,Ling,Jing,Qing,Xing,Ying,Jiong,Qiong,Xiong,Yong,Bu,Pu,Mu,Fu,Du,Tu,Nu,Lu,Gu,Ku,Hu,Zhu,Chu,Shu,Ru,Zu,Cu,Su,Wu,Gua,Kua,Hua,Zhua,Shua,Wa,Duo,Tuo,Nuo,Luo,Guo,Kuo,Huo,Zhuo,Chuo,Shuo,Ruo,Zuo,Cuo,Suo,Wo,Guai,Kuai,Huai,Zhuai,Chuai,Shuai,Wai,Dui,Tui,Gui,Kui,Hui,Zhui,Chui,Shui,Rui,Zui,Cui,Sui,Wei,Duan,Tuan,Nuan,Luan,Guan,Kuan,Huan,Zhuan,Chuan,Shuan,Ruan,Zuan,Zuan,Cuan,Suan,Wan,Dun,Tun,Lun,Gun,Kun,Hun,Zhun,Chun,Shun,Run,Zun,Cun,Sun,Wen,Guang,Kuang,Huang,Zhuang,Chuang,Shuang,Wang,Weng,Nu,Lu,Ju,Qu,Xu,Yu,Nue,Lue,Jue,Que,Xue,Yue,Juan,Quan,Xuan,Yuan,Jun,Qun,Xun,Yun'
 
 
-def readplanforkey(key: str = 's') -> list:
-    plan_d = plan.__members__
-    if key in plan_d.keys():
-        item = plan.__members__[key]
-        if key in 'MDhH':
-            item = item.value.split(',')
-        else:
-            item = list(item.value)
-        return item
-    else:
+def pathdat(path: str):
+    try:
+        import sys
+        p = plib.Path(path).parent
+        data = plib.Path(p, 'phonedat/phone.py')
+        sys.path.append(data)
+        import phonedat.phone
+        ph = phonedat.phone.Phone()
+        return ph
+    except:
         return None
 
 
@@ -49,6 +49,7 @@ class wfileplus:
     xist = None
     total = 0
     Minimum = 8
+    fmua = None
 
     def __init__(self, file: plib.PosixPath, xlis: itertools.product,
                  total: int) -> None:
@@ -62,6 +63,11 @@ class wfileplus:
         else:
             self.Minimum = Vx
             return self.Minimum
+
+    def fmus(self, fl: list, lsof):
+        self.fmua: list = fl
+        self.plus_fmu: fmu = fmu.fMoblieNumber(lsof)
+        print(f'Debug: {self.plus_fmu.find(15972572759)}')
 
     def jionStr(self, *lis):
         fx = '{}' * lis.__len__()
@@ -78,6 +84,8 @@ class wfileplus:
         with self.file.open(mode='w+', encoding='utf-8',
                             buffering=4096) as wfs:
             for i, xL in self.fromtlis():
+                # Fast 11 bit Number
+                # filter phones
                 if xL not in [
                         'NULL',
                 ]:

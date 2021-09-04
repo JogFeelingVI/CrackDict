@@ -3,7 +3,7 @@
 # @Date: 2021-08-30 22:32:39
 # @Last Modified by:   By JogFeelingVi
 # @Last Modified time: 2021-08-30 22:32:39
-from modex import core
+from modex import core, rplan
 import argparse
 
 
@@ -45,8 +45,14 @@ def main():
                          type=int,
                          metavar='',
                          help='Minimum password length')
-    args = command.parse_args()
-    ccurls = core.curls(args=args.__dict__)
+    command.add_argument('--fmu',
+                         nargs='*',
+                         metavar='fmu',
+                         help='Filter Mobile Mumbers ShangHai 20000 az 021')
+    args = command.parse_args().__dict__
+    if (plus_fmu := rplan.pathdat(__file__)) != None:
+        args['plus_fmu'] = plus_fmu
+    ccurls = core.curls(args)
     ccurls.Action()
 
 

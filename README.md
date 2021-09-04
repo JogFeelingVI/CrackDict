@@ -36,6 +36,11 @@ ln -s ~/Downloads/cdlis.command /usr/local/bin/cdlis
   h - ba,pa,ma,jun,qun,xun,yun...
   H - h 首字母大写形式 Chuang Wang ...
 ```
+-------
+** 感谢phone数据提供者 **
+
+* [lsof](https://github.com/ls0f/phone) phone.py
+* [xluohome](https://github.com/xluohome/phonedata) phone.dat
 
 ## wiki
 

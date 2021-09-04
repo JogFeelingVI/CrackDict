@@ -40,8 +40,9 @@ ln -s ./cdlis.command /usr/local/bin/cdlis
 * --dual-d         D Parsed as DD 2 -> 02
 * --dual-md        --dual-m and --dual-d
 * --minpw          Minimum password length
+* --fmu [fmu ...]  Filter Mobile Mumbers ShangHai 20000 az 021
 
-  > 注意 -p 中允许的数值为 c.M.D.d.S.s.P.p.h.f,-c xxx yyy cc. 结果为 ['xxx', 'yyy', 'zzz']. -p cddddddd xxx12345 yyy23456 zzz34567
+  > 注意 -p 中允许的数值为 c.M.D.d.S.s.P.p.h.f,-c xxx yyy cc. 结果为 ['xxx', 'yyy', 'zzz']. -p cddddddd xxx12345 yyy23456, --fmu 需要插件 运行update_phone.sh 获取
 
 **6.如何生成+86手机号码**
 
