@@ -100,7 +100,7 @@ class wfileplus:
                     wfs.writelines(buffer)
                     count = 0
                     buffer.clear()
-                if time.time() - Ns >= 1.0:
+                if time.time() - Ns >= 1.3:
                     tmpt = f'{time.time()-STN:.2f}'
                     print(f'\rProgress: {save/10000:,}xW {tmpt}s [{i/self.total*100:.2f}%]',end='')
                     Ns = time.time()
