@@ -19,7 +19,7 @@ class fMoblieNumber:
         if (resour:=self.find(pNum)) is None:
             return False
         flag = [x for x in fter if x in resour.values()]
-        if flag == fter:
+        if flag != []:
             return True
         else:
             return False

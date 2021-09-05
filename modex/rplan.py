@@ -4,6 +4,7 @@
 # @Last Modified time: 2021-08-31 00:18:17
 import enum, pathlib as plib
 import itertools, time, re
+from typing import ItemsView
 from . import fmu
 
 
@@ -79,6 +80,11 @@ class wfileplus:
         for i, x in enumerate(self.xist):
             yield [i, self.jionStr(*x)]
 
+    def filter_fmu(self, xL) -> itertools.product:
+        if self.fmua != None and self.plus_fmu != None:
+            tmp = xL if self.plus_fmu.filter(xL, self.fmua) == True else 'NULL'
+            return tmp
+
     def writels(self):
         buffer, count, bs, save, Ns = list(), 0, 50000, 0, time.time()
         STN = time.time()
@@ -86,10 +92,11 @@ class wfileplus:
                             buffering=4096) as wfs:
             for i, xL in self.fromtlis():
                 # Fast 11 bit Number
-                if self.plus_fmu != None and self.fmua != None:
-                    if self.plus_fmu.filter(xL, self.fmua) == False:
-                        xL = 'NULL'
+                # if self.plus_fmu != None and self.fmua != None:
+                #     if self.plus_fmu.filter(xL, self.fmua) == False:
+                #         xL = 'NULL'
                 # filter phones
+                xL = self.filter_fmu(xL)
                 if xL not in [
                         'NULL',
                 ]:
@@ -100,9 +107,9 @@ class wfileplus:
                     wfs.writelines(buffer)
                     count = 0
                     buffer.clear()
-                if time.time() - Ns >= 1.3:
+                if time.time() - Ns >= 1.31:
                     tmpt = f'{time.time()-STN:.2f}'
-                    print(f'\rProgress: {save/10000:,}xW {tmpt}s [{i/self.total*100:.2f}%]',end='')
+                    print(f'\rProgress: {i/10000:,.2f}/{save/10000:,} {tmpt}s [{i/self.total*100:.2f}%]',end='')
                     Ns = time.time()
         ust = f'{time.time() - STN:.2f} seconds'
         size = f'{self.file.stat().st_size/1024.0:.2f}kb'
