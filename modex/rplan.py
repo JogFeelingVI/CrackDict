@@ -109,7 +109,9 @@ class wfileplus:
                     buffer.clear()
                 if time.time() - Ns >= 1.31:
                     tmpt = f'{time.time()-STN:.2f}'
-                    print(f'\rProgress: {i/10000:,.2f}/{save/10000:,} {tmpt}s [{i/self.total*100:.2f}%]',end='')
+                    print(
+                        f'\rProgress: {i/10000:,.2f} {save/10000:,} {tmpt}s [ {i/self.total*100:.2f}% ]',
+                        end='')
                     Ns = time.time()
         ust = f'{time.time() - STN:.2f} seconds'
         size = f'{self.file.stat().st_size/1024.0:.2f}kb'
