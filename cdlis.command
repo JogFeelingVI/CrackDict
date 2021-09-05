@@ -50,7 +50,7 @@ def main():
                          metavar='fmu',
                          help='Filter Mobile Mumbers ShangHai 20000 az 021')
     args = command.parse_args().__dict__
-    if (plus_fmu := rplan.pathdat(__file__)) != None:
+    if (plus_fmu := rplan.pathdat(__file__)) != None and 'fmu' in args.keys():
         args['plus_fmu'] = plus_fmu
     ccurls = core.curls(args)
     ccurls.Action()

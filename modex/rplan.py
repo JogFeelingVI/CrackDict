@@ -50,6 +50,7 @@ class wfileplus:
     total = 0
     Minimum = 8
     fmua = None
+    plus_fmu = None
 
     def __init__(self, file: plib.PosixPath, xlis: itertools.product,
                  total: int) -> None:
@@ -67,7 +68,7 @@ class wfileplus:
     def fmus(self, fl: list, lsof):
         self.fmua: list = fl
         self.plus_fmu: fmu = fmu.fMoblieNumber(lsof)
-        print(f'Debug: {self.plus_fmu.find(15972572759)}')
+        #print(f'Debug: {self.plus_fmu.find(15972572759)}')
 
     def jionStr(self, *lis):
         fx = '{}' * lis.__len__()
@@ -79,12 +80,15 @@ class wfileplus:
             yield [i, self.jionStr(*x)]
 
     def writels(self):
-        buffer, count, bs, save = list(), 0, 50000, 0
+        buffer, count, bs, save, Ns = list(), 0, 50000, 0, time.time()
         STN = time.time()
         with self.file.open(mode='w+', encoding='utf-8',
                             buffering=4096) as wfs:
             for i, xL in self.fromtlis():
                 # Fast 11 bit Number
+                if self.plus_fmu != None and self.fmua != None:
+                    if self.plus_fmu.filter(xL, self.fmua) == False:
+                        xL = 'NULL'
                 # filter phones
                 if xL not in [
                         'NULL',
@@ -96,10 +100,10 @@ class wfileplus:
                     wfs.writelines(buffer)
                     count = 0
                     buffer.clear()
+                if time.time() - Ns >= 1.0:
                     tmpt = f'{time.time()-STN:.2f}'
-                    print(
-                        f'\rProgress: {save/10000:,}xW {tmpt}s [{i/self.total*100:.2f}%]',
-                        end='')
+                    print(f'\rProgress: {save/10000:,}xW {tmpt}s [{i/self.total*100:.2f}%]',end='')
+                    Ns = time.time()
         ust = f'{time.time() - STN:.2f} seconds'
         size = f'{self.file.stat().st_size/1024.0:.2f}kb'
         print(f'\nWrite completion Use time {ust} File size {size}')
