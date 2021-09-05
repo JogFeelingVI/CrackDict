@@ -3,9 +3,9 @@
 # @Last Modified by:   By JogFeelingVi
 # @Last Modified time: 2021-08-31 00:18:17
 import enum, pathlib as plib
-import itertools, time, re
-from typing import ItemsView
+import itertools, time
 from . import fmu
+import multiprocessing as multp
 
 
 class plan(enum.Enum):
@@ -45,6 +45,26 @@ def jionStr(*lis):
     return fx.format(*lis)
 
 
+class yieldxlis:
+    index, max = 0,
+    pg_size = 100000
+    pg_count = -1
+    xList = None
+
+    def __init__(self, Total: int, Xlis: itertools.product) -> None:
+        self.max = Total
+        self.xList = Xlis
+        self.pg_count = Total // self.pg_size
+
+    def Read_pg(self) -> list:
+        '''
+            Read Page
+        '''
+        while self.index <= self.max:
+            yield list(itertools.islice(self.xList, self.pg_size))
+            self.index += self.pg_size
+
+
 class wfileplus:
     file = None
     xist = None
@@ -58,6 +78,21 @@ class wfileplus:
         self.file = file
         self.xist = xlis
         self.total = total
+        self.yi_xList = yieldxlis(total, xlis)
+
+    def RunCode_N(func, qlist) -> list:
+        '''
+            MuTherm door
+        '''
+        CpuSize = multp.cpu_count()
+        p = multp.Pool(processes=CpuSize)
+        Rn = p.map(func, qlist)
+        
+    def Compared_Zi(Zip_item: list):
+        '''
+        Any Core Run Code
+        '''
+        pass
 
     def minpw(self, Vx: int = -1):
         if Vx == -1:
