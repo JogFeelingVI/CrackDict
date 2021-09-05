@@ -4,8 +4,10 @@
 # @Last Modified time: 2021-08-31 00:18:17
 import enum, pathlib as plib
 import itertools, time
+from re import S
 from . import fmu
 import multiprocessing as multp
+from threading import Lock
 
 
 class plan(enum.Enum):
@@ -73,6 +75,10 @@ class wfileplus:
     Minimum = 8
     fmua = None
     plus_fmu = None
+    save = 0
+    __lock = Lock()
+    __STN = time.time()
+    __PSN = time.time()
 
     def __init__(self, file: plib.PosixPath, xlis: itertools.product,
                  total: int) -> None:
@@ -91,15 +97,34 @@ class wfileplus:
         Rn = p.map(func, qlist)
         return Rn
 
+    def Progress(self):
+        if time.time() - self.__PSN >= 1.31:
+            tmpt = round(time.time() - self.__STN, 2)
+            speed = self.save / tmpt
+            timeleft = (self.total - self.save) / speed
+            progressv = f'[ {self.save/self.total*100:.2f} %]'
+            print(
+                f'\rProgress: {speed:.2f}kb/s {tmpt}uS {timeleft:.2f}tL {progressv}',
+                end='')
+            self.__PSN = time.time()
+
     def Compared_Zi(self, Zip_item: list):
         '''
         Any Core Run Code
         '''
-        print('Enter Comm')
+        buffer = ''
+        count = 0
         for zi in Zip_item:
             zi_str = self.jionStr(*zi)
-            print(zi_str)
-        return 'NULL'
+            zi_str = self.filter_fmu(zi_str)
+            if zi_str is not 'NULL':
+                buffer += f'{zi_str}\n'
+                count += 1
+            self.save += 1
+            self.Progress()
+        if count >= 1:
+            self.SaveAs(buffer)
+        return count
 
     def SaveAs(self, info: str):
         '''
@@ -135,7 +160,6 @@ class wfileplus:
 
     def writeLc(self):
         Jie = self.yi_xList.Read_pg()
-        print(f'Debug: Type Jie {type(Jie)}')
         Rns = self.RunCode_N(self.Compared_Zi, Jie)
 
     def writels(self):
