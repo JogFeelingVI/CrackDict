@@ -46,7 +46,7 @@ def jionStr(*lis):
 
 
 class yieldxlis:
-    index, max = 0,
+    index, max = 0, 1
     pg_size = 100000
     pg_count = -1
     xList = None
@@ -61,8 +61,9 @@ class yieldxlis:
             Read Page
         '''
         while self.index <= self.max:
-            yield list(itertools.islice(self.xList, self.pg_size))
+            yield itertools.islice(self.xList, self.pg_size)
             self.index += self.pg_size
+            self.pg_count -= 1
 
 
 class wfileplus:
@@ -80,6 +81,7 @@ class wfileplus:
         self.total = total
         self.yi_xList = yieldxlis(total, xlis)
 
+    @staticmethod
     def RunCode_N(func, qlist) -> list:
         '''
             MuTherm door
@@ -87,12 +89,24 @@ class wfileplus:
         CpuSize = multp.cpu_count()
         p = multp.Pool(processes=CpuSize)
         Rn = p.map(func, qlist)
-        
-    def Compared_Zi(Zip_item: list):
+        return Rn
+
+    def Compared_Zi(self, Zip_item: list):
         '''
         Any Core Run Code
         '''
-        pass
+        print('Enter Comm')
+        for zi in Zip_item:
+            zi_str = self.jionStr(*zi)
+            print(zi_str)
+        return 'NULL'
+
+    def SaveAs(self, info: str):
+        '''
+        Save to File
+        '''
+        with self.file.open(mode='a', encoding='utf-8', buffering=4096) as wfs:
+            wfs.write(info)
 
     def minpw(self, Vx: int = -1):
         if Vx == -1:
@@ -104,7 +118,6 @@ class wfileplus:
     def fmus(self, fl: list, lsof):
         self.fmua: list = fl
         self.plus_fmu: fmu = fmu.fMoblieNumber(lsof)
-        #print(f'Debug: {self.plus_fmu.find(15972572759)}')
 
     def jionStr(self, *lis):
         fx = '{}' * lis.__len__()
@@ -119,6 +132,11 @@ class wfileplus:
         if self.fmua != None and self.plus_fmu != None:
             tmp = xL if self.plus_fmu.filter(xL, self.fmua) == True else 'NULL'
             return tmp
+
+    def writeLc(self):
+        Jie = self.yi_xList.Read_pg()
+        print(f'Debug: Type Jie {type(Jie)}')
+        Rns = self.RunCode_N(self.Compared_Zi, Jie)
 
     def writels(self):
         buffer, count, bs, save, Ns = list(), 0, 50000, 0, time.time()

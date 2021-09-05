@@ -119,7 +119,7 @@ class curls:
                 print('Plus_fmu Start Error!')
             # wplan.fumc = {'fum': funcobj, 'args': [x, y, z]}
             print(f'Minimum password length {wplan.minpw(minpw)}')
-            wplan.writels()
+            wplan.writeLc()
 
     def __act_list__(self, b: bool):
         if b == False:
