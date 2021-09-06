@@ -94,10 +94,11 @@ class curls:
         # mksnumber
         bijiao = {True if x >= minpw else False for x in lse}
         if True in bijiao:
-            self.Synthesis = product(*GPS)
+            self.Synthesis = GPS
             print(f'Number of password digits {lse}')
             print(f'Scope: {start}-{ends}')
-            self.nName = f'{ends}'
+            self.nName = self.fname_invalid(f'{ends}')
+            # File name invalid
             print(f'Count: {self.Count:,} Done!')
         else:
             print(
@@ -131,6 +132,19 @@ class curls:
         print('- h ba,pa,ma,fa,da,tu...')
         print('- H Ba,Zhang,Zhao,Yun...')
         print('- c Custom list, -c xxx yyy zzz')
+
+    @staticmethod
+    def fname_invalid(fname:str) -> str:
+        if len(fname) > 255:
+            fname = fname[0:10]
+        if fname[0] in ['+', '-', '.']:
+            fname = fname[1:-1]
+        blacklist = ['/', '\t', '\b', '@', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']', '?']
+        intersection = set(blacklist) & set(fname)
+        if len(intersection) != 0:
+            regx = '[{}]'.format(''.join(intersection))
+            fname = re.sub(regx, '', fname)
+        return fname
 
     def rPlan(self, key: str):
         if key in self.Dataforplan.keys():

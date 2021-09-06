@@ -4,10 +4,10 @@
 # @Last Modified time: 2021-08-31 00:18:17
 import enum, pathlib as plib
 import itertools, time
+import re
 from re import S
 from . import fmu
 import multiprocessing as multp
-from threading import Lock
 
 
 class plan(enum.Enum):
@@ -48,42 +48,36 @@ def jionStr(*lis):
 
 
 class yieldxlis:
-    index, max = 0, 1
-    pg_size = 100000
-    pg_count = -1
-    xList = None
+    index = 0
+    pgcount = -1
+    pgsize = 0
 
-    def __init__(self, Total: int, Xlis: itertools.product) -> None:
-        self.max = Total
-        self.xList = Xlis
-        self.pg_count = Total // self.pg_size
+    def __init__(self, Total: int, GPS:list, pgsize:int=100000) -> None:
+        self.xgps = itertools.product(*GPS)
+        self.pgcount = Total // pgsize
+        self.pgsize = pgsize
 
     def Read_pg(self) -> list:
         '''
             Read Page
         '''
-        while self.index <= self.max:
-            yield itertools.islice(self.xList, self.pg_size)
-            self.index += self.pg_size
-            self.pg_count -= 1
-
+        while self.index <= self.pgcount:
+            yield itertools.islice(self.xgps, self.pgsize)
+            self.index += 1
 
 class wfileplus:
     file = None
-    xist = None
     total = 0
     Minimum = 8
     fmua = None
     plus_fmu = None
     save = 0
-    __lock = Lock()
     __STN = time.time()
     __PSN = time.time()
 
-    def __init__(self, file: plib.PosixPath, xlis: itertools.product,
+    def __init__(self, file: plib.PosixPath, xlis: list,
                  total: int) -> None:
         self.file = file
-        self.xist = xlis
         self.total = total
         self.yi_xList = yieldxlis(total, xlis)
 
@@ -97,7 +91,7 @@ class wfileplus:
         Rn = p.map(func, qlist)
         return Rn
 
-    def Progress(self):
+    def Progress(self,):
         if time.time() - self.__PSN >= 1.31:
             tmpt = round(time.time() - self.__STN, 2)
             speed = self.save / tmpt
@@ -108,6 +102,12 @@ class wfileplus:
                 end='')
             self.__PSN = time.time()
 
+    def Compared_Zi_T(self, Zip_item: list):
+        for zi in Zip_item:
+            zi_str = self.jionStr(*zi)
+            #print(zi_str)
+        return 3
+
     def Compared_Zi(self, Zip_item: list):
         '''
         Any Core Run Code
@@ -117,6 +117,7 @@ class wfileplus:
         for zi in Zip_item:
             zi_str = self.jionStr(*zi)
             zi_str = self.filter_fmu(zi_str)
+            #print(f'Debug: {zi_str}')
             if zi_str is not 'NULL':
                 buffer += f'{zi_str}\n'
                 count += 1
@@ -154,42 +155,14 @@ class wfileplus:
             yield [i, self.jionStr(*x)]
 
     def filter_fmu(self, xL) -> itertools.product:
-        if self.fmua != None and self.plus_fmu != None:
-            tmp = xL if self.plus_fmu.filter(xL, self.fmua) == True else 'NULL'
-            return tmp
+        if self.fmua != [] and self.plus_fmu != None:
+            xL = xL if self.plus_fmu.filter(xL, self.fmua) == True else 'NULL'
+        return xL
 
     def writeLc(self):
         Jie = self.yi_xList.Read_pg()
-        Rns = self.RunCode_N(self.Compared_Zi, Jie)
-
-    def writels(self):
-        buffer, count, bs, save, Ns = list(), 0, 50000, 0, time.time()
-        STN = time.time()
-        with self.file.open(mode='w+', encoding='utf-8',
-                            buffering=4096) as wfs:
-            for i, xL in self.fromtlis():
-                # Fast 11 bit Number
-                # if self.plus_fmu != None and self.fmua != None:
-                #     if self.plus_fmu.filter(xL, self.fmua) == False:
-                #         xL = 'NULL'
-                # filter phones
-                xL = self.filter_fmu(xL)
-                if xL not in [
-                        'NULL',
-                ]:
-                    buffer.append(f'{xL}\n')
-                    save += 1
-                    count += 1
-                if count == bs or self.total - i == 1:
-                    wfs.writelines(buffer)
-                    count = 0
-                    buffer.clear()
-                if time.time() - Ns >= 1.31:
-                    tmpt = f'{time.time()-STN:.2f}'
-                    print(
-                        f'\rProgress: {i/10000:,.2f} {save/10000:,} {tmpt}s [ {i/self.total*100:.2f}% ]',
-                        end='')
-                    Ns = time.time()
-        ust = f'{time.time() - STN:.2f} seconds'
-        size = f'{self.file.stat().st_size/1024.0:.2f}kb'
-        print(f'\nWrite completion Use time {ust} File size {size}')
+        Rns = self.RunCode_N(self.Compared_Zi_T, Jie)
+        ust = f'{time.time() - self.__STN:.2f} seconds'
+        sRns = sum(Rns)
+        size = f'{self.file.stat().st_size/1024.0:.2f}kb' if sRns > 0 else '0kb' 
+        print(f'\nWrite completion Use time {ust} File size {size} {sRns}items')
