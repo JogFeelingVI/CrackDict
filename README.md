@@ -1,5 +1,5 @@
 # CrackDict
-###### hashcat Pinyin\生日... 字典生成工具, 默认最小密码长度为8,For MacOs and Linux
+###### hashcat dictionary generation tool,For MacOs and Linux
 -----
 ## Install
 
