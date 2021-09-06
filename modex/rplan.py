@@ -147,8 +147,10 @@ class wfileplus:
 
     def writeLc(self):
         Jie = self.yieldxlis.ReadPg()
+        CpuSize = multp.cpu_count()
+        p = multp.Pool(processes=CpuSize)
         for jQun in Jie:
-            Rns = self.RunCode_N(self.Compared_Zi_T, jQun)
+            Rns = p.map(self.Compared_Zi_T, jQun)
             buffer = [z for z in Rns if z != 'NULL']
             if buffer != []:
                 self.SaveAs(''.join(buffer))
