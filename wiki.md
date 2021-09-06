@@ -70,5 +70,9 @@ ln -s ./cdlis.command /usr/local/bin/cdlis
 
   > 解析 YYYYMMDD 年四位数字 -c 19 20 只显示19xx年至20xx年.[0126789]可以组合出190x,209x年年份,[01]月份第一位数字,月份最大01-12,所以[01]d,[0123]d,指日期,日期第一位数字最小0,最大3,所以输入[0123]d
 
+**10.如何制作一张手机号码字典文件**
+* `cdlis -c '?d?d?d?d' -p [1][3456789]dddddc --fmu 联通`
+  
+  > 上面的命令可以生成 1333978?d?d?d?d的字典文件, hashcat -a3 来使用这些字典文件, --fmu 可以使用 多种信息，详情请参阅[xluohome](https://github.com/xluohome/phonedata)  比如 --fmu 上海
 ------
 `JogFeelingVI`
