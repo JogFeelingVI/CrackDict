@@ -52,18 +52,23 @@ class yieldxlis:
     pgcount = -1
     pgsize = 0
 
-    def __init__(self, Total: int, GPS:list, pgsize:int=100000) -> None:
+    def __init__(self, Total: int, GPS: list, pgsize: int = 100000) -> None:
         self.xgps = itertools.product(*GPS)
         self.pgcount = Total // pgsize
         self.pgsize = pgsize
 
-    def Read_pg(self) -> list:
+    def chunk(self):
+        return iter(lambda: tuple(itertools.islice(self.xgps, self.pgsize)),
+                    ())
+
+    def ReadPg(self) -> list:
         '''
             Read Page
         '''
         while self.index <= self.pgcount:
             yield itertools.islice(self.xgps, self.pgsize)
             self.index += 1
+
 
 class wfileplus:
     file = None
@@ -75,11 +80,10 @@ class wfileplus:
     __STN = time.time()
     __PSN = time.time()
 
-    def __init__(self, file: plib.PosixPath, xlis: list,
-                 total: int) -> None:
+    def __init__(self, file: plib.PosixPath, GPS: list, total: int) -> None:
         self.file = file
         self.total = total
-        self.yi_xList = yieldxlis(total, xlis)
+        self.yieldxlis = yieldxlis(total, GPS)
 
     @staticmethod
     def RunCode_N(func, qlist) -> list:
@@ -91,41 +95,23 @@ class wfileplus:
         Rn = p.map(func, qlist)
         return Rn
 
-    def Progress(self,):
+    def Progress(self, r: int):
+        self.save += r
         if time.time() - self.__PSN >= 1.31:
             tmpt = round(time.time() - self.__STN, 2)
-            speed = self.save / tmpt
-            timeleft = (self.total - self.save) / speed
+            speed = round(self.save / tmpt, 2)
+            timeleft = round((self.total - self.save) / speed, 2)
             progressv = f'[ {self.save/self.total*100:.2f} %]'
-            print(
-                f'\rProgress: {speed:.2f}kb/s {tmpt}uS {timeleft:.2f}tL {progressv}',
-                end='')
+            print(f'\rProgress: {speed}kb/s {tmpt}uS {timeleft}tL {progressv}',
+                  end='')
             self.__PSN = time.time()
 
     def Compared_Zi_T(self, Zip_item: list):
-        for zi in Zip_item:
-            zi_str = self.jionStr(*zi)
-            #print(zi_str)
-        return 3
-
-    def Compared_Zi(self, Zip_item: list):
-        '''
-        Any Core Run Code
-        '''
-        buffer = ''
-        count = 0
-        for zi in Zip_item:
-            zi_str = self.jionStr(*zi)
-            zi_str = self.filter_fmu(zi_str)
-            #print(f'Debug: {zi_str}')
-            if zi_str is not 'NULL':
-                buffer += f'{zi_str}\n'
-                count += 1
-            self.save += 1
-            self.Progress()
-        if count >= 1:
-            self.SaveAs(buffer)
-        return count
+        zi_str = self.jionStr(*Zip_item)
+        zi_str = self.filter_fmu(zi_str)
+        if zi_str != 'NULL':
+            zi_str = f'{zi_str}\n'
+        return zi_str
 
     def SaveAs(self, info: str):
         '''
@@ -160,9 +146,20 @@ class wfileplus:
         return xL
 
     def writeLc(self):
-        Jie = self.yi_xList.Read_pg()
-        Rns = self.RunCode_N(self.Compared_Zi_T, Jie)
-        ust = f'{time.time() - self.__STN:.2f} seconds'
-        sRns = sum(Rns)
-        size = f'{self.file.stat().st_size/1024.0:.2f}kb' if sRns > 0 else '0kb' 
-        print(f'\nWrite completion Use time {ust} File size {size} {sRns}items')
+        Jie = self.yieldxlis.ReadPg()
+        for jQun in Jie:
+            Rns = self.RunCode_N(self.Compared_Zi_T, jQun)
+            buffer = [z for z in Rns if z != 'NULL']
+            if buffer != []:
+                self.SaveAs(''.join(buffer))
+            self.Progress(len(Rns))
+        size = f'{self.file.stat().st_size/1024.0:.2f}kb'
+        ust = round(time.time() - self.__STN, 2)
+        print(
+            f'\nWrite completion Use time {ust} File size {size} {self.save}')
+
+        # Rns = self.RunCode_N(self.Compared_Zi, Jie)
+        # ust = f'{time.time() - self.__STN:.2f} seconds'
+        # sRns = sum(Rns)
+        # size = f'{self.file.stat().st_size/1024.0:.2f}kb' if sRns > 0 else '0kb'
+        # print(f'\nWrite completion Use time {ust} File size {size} {sRns}items')
