@@ -74,5 +74,7 @@ ln -s ./cdlis.command /usr/local/bin/cdlis
 * `cdlis -c '?d?d?d?d' -p [1][3456789]dddddc --fmu 联通`
   
   > 上面的命令可以生成 1333978?d?d?d?d的字典文件, hashcat -a3 来使用这些字典文件, --fmu 可以使用 多种信息，详情请参阅[xluohome](https://github.com/xluohome/phonedata)  比如 --fmu 上海
+  >
+  > ![1999dddd](https://github.com/JogFeelingVI/CrackDict/raw/master/images/1999999dddd.png)
 ------
 `JogFeelingVI`
