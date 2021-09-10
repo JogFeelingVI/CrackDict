@@ -113,7 +113,7 @@ class wfileplus:
             return wrapper
         return decorator
 
-    @jingdu('Text')
+    @jingdu('Go')
     def Compared_Zi_T(self, Zip_item: list):
         zi_str = self.jionStr(*Zip_item)
         zi_str = self.filter_fmu(zi_str)
