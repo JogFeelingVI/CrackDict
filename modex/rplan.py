@@ -3,6 +3,7 @@
 # @Last Modified by:   By JogFeelingVi
 # @Last Modified time: 2021-08-31 00:18:17
 import enum, pathlib as plib
+from os import RTLD_NODELETE
 import itertools, time
 import re
 from re import S
@@ -102,9 +103,16 @@ class wfileplus:
             speed = round(self.save / tmpt, 2)
             timeleft = round((self.total - self.save) / speed, 2)
             progressv = f'[ {self.save/self.total*100:.2f} %]'
-            print(f'\rProgress: {speed}kb/s {tmpt}uS {timeleft}tL {progressv}',
+            print(f'\rProgress: {speed}kb/s {tmpt}s {timeleft}TLs {progressv}',
                   end='')
             self.__PSN = time.time()
+
+    def jingdu(comp):
+        def wrapper(*a, **ka):
+            ex = comp(*a, **ka)
+            print(f'ZsQ: {ex}')
+            return ex
+        return wrapper
 
     def Compared_Zi_T(self, Zip_item: list):
         zi_str = self.jionStr(*Zip_item)
@@ -156,9 +164,9 @@ class wfileplus:
                 self.SaveAs(''.join(buffer))
             self.Progress(len(Rns))
         size = f'{self.file.stat().st_size/1024.0:.2f}kb'
-        ust = round(time.time() - self.__STN, 2)
+        ust = f'{time.time() - self.__STN:.2f}s'
         print(
-            f'\nWrite completion Use time {ust} File size {size} {self.save}')
+            f'\nWrite completion Use time {ust} File size {size}')
 
         # Rns = self.RunCode_N(self.Compared_Zi, Jie)
         # ust = f'{time.time() - self.__STN:.2f} seconds'
