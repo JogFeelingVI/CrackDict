@@ -3,10 +3,7 @@
 # @Last Modified by:   By JogFeelingVi
 # @Last Modified time: 2021-08-31 00:18:17
 import enum, pathlib as plib
-from os import RTLD_NODELETE
-import itertools, time
-import re
-from re import S
+import itertools, functools, re, time
 from . import fmu
 import multiprocessing as multp
 
@@ -107,13 +104,16 @@ class wfileplus:
                   end='')
             self.__PSN = time.time()
 
-    def jingdu(comp):
-        def wrapper(*a, **ka):
-            ex = comp(*a, **ka)
-            print(f'ZsQ: {ex}')
-            return ex
-        return wrapper
+    def jingdu(text):
+        def decorator(comp):
+            @functools.wraps(comp)
+            def wrapper(*a, **ka):
+                ex = comp(*a, **ka)
+                return ex
+            return wrapper
+        return decorator
 
+    @jingdu('Text')
     def Compared_Zi_T(self, Zip_item: list):
         zi_str = self.jionStr(*Zip_item)
         zi_str = self.filter_fmu(zi_str)
