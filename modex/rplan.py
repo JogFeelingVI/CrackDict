@@ -55,11 +55,7 @@ class yieldxlis:
         self.pgcount = Total // pgsize
         self.pgsize = pgsize
 
-    def chunk(self):
-        return iter(lambda: tuple(itertools.islice(self.xgps, self.pgsize)),
-                    ())
-
-    def ReadPg(self) -> list:
+    def page(self) -> list:
         '''
             Read Page
         '''
@@ -110,7 +106,9 @@ class wfileplus:
             def wrapper(*a, **ka):
                 ex = comp(*a, **ka)
                 return ex
+
             return wrapper
+
         return decorator
 
     @jingdu('Go')
@@ -121,11 +119,12 @@ class wfileplus:
             zi_str = f'{zi_str}\n'
         return zi_str
 
-    def SaveAs(self, info: str):
+    def SaveAs(self, info: list):
         '''
         Save to File
         '''
         with self.file.open(mode='a', encoding='utf-8', buffering=4096) as wfs:
+            info = ''.join((f'{i}\n' for i in info))
             wfs.write(info)
 
     def minpw(self, Vx: int = -1):
@@ -144,9 +143,9 @@ class wfileplus:
         fxs = fx.format(*lis)
         return fxs if len(fxs) >= self.minpw() else 'NULL'
 
-    def fromtlis(self) -> list:
-        for i, x in enumerate(self.xist):
-            yield [i, self.jionStr(*x)]
+    # def fromtlis(self) -> list:
+    #     for i, x in enumerate(self.xist):
+    #         yield [i, self.jionStr(*x)]
 
     def filter_fmu(self, xL) -> itertools.product:
         if self.fmua != [] and self.plus_fmu != None:
@@ -154,19 +153,18 @@ class wfileplus:
         return xL
 
     def writeLc(self):
-        Jie = self.yieldxlis.ReadPg()
+        Jie = self.yieldxlis.page()
         CpuSize = multp.cpu_count()
         p = multp.Pool(processes=CpuSize)
         for jQun in Jie:
             Rns = p.map(self.Compared_Zi_T, jQun)
             buffer = [z for z in Rns if z != 'NULL']
             if buffer != []:
-                self.SaveAs(''.join(buffer))
+                self.SaveAs(buffer)
             self.Progress(len(Rns))
         size = f'{self.file.stat().st_size/1024.0:.2f}kb'
         ust = f'{time.time() - self.__STN:.2f}s'
-        print(
-            f'\nWrite completion Use time {ust} File size {size}')
+        print(f'\nWrite completion Use time {ust} File size {size}')
 
         # Rns = self.RunCode_N(self.Compared_Zi, Jie)
         # ust = f'{time.time() - self.__STN:.2f} seconds'
