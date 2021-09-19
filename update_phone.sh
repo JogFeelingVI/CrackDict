@@ -13,5 +13,5 @@ then
 fi
 echo 'Download phone dat/py'
 curl -Ls  -o "$PDIR/phone.dat" "https://github.com/xluohome/phonedata/raw/master/phone.dat"
-curl -Ls -o "$PDIR/phone.py" "https://github.com/ls0f/phone/raw/master/phone/phone.py"
+#curl -Ls -o "$PDIR/phone.py" "https://github.com/ls0f/phone/raw/master/phone/phone.py"
 echo "Update completed"

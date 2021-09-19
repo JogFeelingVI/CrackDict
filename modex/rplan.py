@@ -4,6 +4,7 @@
 # @Last Modified time: 2021-08-31 00:18:17
 import enum, pathlib as plib
 import itertools, functools, re, time
+from typing import Any
 from . import fmu
 import multiprocessing as multp
 
@@ -64,6 +65,24 @@ class yieldxlis:
             self.index += 1
 
 
+class logs_ex:
+    def __init__(self, text:str) -> None:
+        self.T = text
+
+    def __call__(self, func, *args: Any, **kwds: Any) -> Any:
+        @functools.wraps(func)
+        def inner(*args: Any, **kwds: Any) -> Any:
+            self.StoLog(func)
+            retx = func(*args, **kwds)
+            return retx
+        return inner
+    
+    def StoLog(self, func):
+        logS = f'{time.localtime()} {self.T} {func.__name__}'
+        with open('./Logs.log', 'a+', 'utf-8') as wlogs:
+            wlogs.write(logS)
+
+
 class wfileplus:
     file = None
     total = 0
@@ -79,16 +98,6 @@ class wfileplus:
         self.total = total
         self.yieldxlis = yieldxlis(total, GPS)
 
-    @staticmethod
-    def RunCode_N(func, qlist) -> list:
-        '''
-            MuTherm door
-        '''
-        CpuSize = multp.cpu_count()
-        p = multp.Pool(processes=CpuSize)
-        Rn = p.map(func, qlist)
-        return Rn
-
     def Progress(self, r: int):
         self.save += r
         if time.time() - self.__PSN >= 1.31:
@@ -100,18 +109,7 @@ class wfileplus:
                   end='')
             self.__PSN = time.time()
 
-    def jingdu(text):
-        def decorator(comp):
-            @functools.wraps(comp)
-            def wrapper(*a, **ka):
-                ex = comp(*a, **ka)
-                return ex
-
-            return wrapper
-
-        return decorator
-
-    @jingdu('Go')
+    
     def Compared_Zi_T(self, Zip_item: list):
         zi_str = self.jionStr(*Zip_item)
         zi_str = self.filter_fmu(zi_str)
@@ -164,7 +162,7 @@ class wfileplus:
             self.Progress(len(Rns))
         size = f'{self.file.stat().st_size/1024.0:.2f}kb'
         ust = f'{time.time() - self.__STN:.2f}s'
-        print(f'\nWrite completion Use time {ust} File size {size}')
+        print(f'\rWrite completion Use time {ust} File size {size}')
 
         # Rns = self.RunCode_N(self.Compared_Zi, Jie)
         # ust = f'{time.time() - self.__STN:.2f} seconds'
