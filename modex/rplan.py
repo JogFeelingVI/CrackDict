@@ -116,7 +116,7 @@ class wfileplus:
             zi_fmu = f'{zi_fmu}\n'
         return zi_fmu
 
-    def SaveAs(self, info: list):
+    def SaveAs(self, info: list) -> None:
         '''
         Save to File
         '''
@@ -124,14 +124,14 @@ class wfileplus:
             infox:str = ''.join((f'{i}\n' for i in info))
             wfs.write(infox)
 
-    def minpw(self, Vx: int = -1):
+    def minpw(self, Vx: int = -1) -> int:
         if Vx == -1:
             return self.Minimum
         else:
             self.Minimum = Vx
             return self.Minimum
 
-    def fmus(self, fl: list, lsof):
+    def fmus(self, fl: list, lsof) -> None:
         self.fmua: list = fl
         self.plus_fmu = fmu.fMoblieNumber(lsof)
 
