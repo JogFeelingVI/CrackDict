@@ -23,7 +23,7 @@ def main():
     command.add_argument('-o',
                          dest='out',
                          metavar='outfile',
-                         help='Save to file'),
+                         help='Save to file')
     command.add_argument('--list',
                          action='store_true',
                          default=False,

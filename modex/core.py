@@ -5,6 +5,7 @@
 from . import rplan
 from itertools import zip_longest, repeat, product
 from functools import reduce
+from typing import Iterable, List
 import re
 
 
@@ -17,7 +18,7 @@ class curls:
     Synthesis = None
     nName = ''
     Count = 0
-    Dataforplan = {'plan': 'TMDsSpPhHf'}
+    Dataforplan:dict = {'plan': 'TMDsSpPhHf'}
 
     __act_dict = {
         'cust': lambda s, l: curls.__act_cust__(s, l),
@@ -40,8 +41,11 @@ class curls:
     def __act_dual_m__(self, m: bool):
         if m == False:
             return
-        tmp = [f'{int(m):02}' for m in self.Dataforplan['M']]
-        self.Dataforplan['M'] = tmp
+        # M [1, 2, 3...11,12]
+        # D [1, 2, 3...30,31]
+        tmp:Iterable[int] = map(int, self.Dataforplan.get('M', '0'))
+        tmp_Str = [f'{int(m):02}' for m in tmp]
+        self.Dataforplan.update({'M': tmp_Str})
 
     def __act_dual_d__(self, m: bool):
         if m == False:
@@ -69,7 +73,7 @@ class curls:
             return
         # add [3456789] {1}
         GPS = []
-        plan_m = re.finditer('(\[([^\[\]]*)\])|([TMDdSspPfhcH])', S)
+        plan_m = re.finditer(r'(\[([^\[\]]*)\])|([TMDdSspPfhcH])', S)
         for m in plan_m:
             x, y = m.span()
             if y - x > 1:
@@ -113,7 +117,7 @@ class curls:
             print(f'OutFile: {outf}')
             #rplan.wfilefor(outf, curls.Synthesis)
             wplan = rplan.wfileplus(outf, self.Synthesis, self.Count)
-            minpw = self.Archives['minpw']
+            minpw = int(self.Archives['minpw'])
             if self.fmu != None and 'plus_fmu' in self.Archives.keys():
                 wplan.fmus(self.fmu, self.Archives['plus_fmu'])
             else:
@@ -134,23 +138,26 @@ class curls:
         print('- c Custom list, -c xxx yyy zzz')
 
     @staticmethod
-    def fname_invalid(fname:str) -> str:
+    def fname_invalid(fname: str) -> str:
         if len(fname) > 255:
             fname = fname[0:10]
         if fname[0] in ['+', '-', '.']:
             fname = fname[1:-1]
-        blacklist = ['/', '\t', '\b', '@', '#', '$', '%', '^', '&', '*', '(', ')', '[', ']', '?']
+        blacklist = [
+            '/', '\t', '\b', '@', '#', '$', '%', '^', '&', '*', '(', ')', '[',
+            ']', '?'
+        ]
         intersection = set(blacklist) & set(fname)
         if len(intersection) != 0:
             regx = '[{}]'.format(''.join(intersection))
             fname = re.sub(regx, '', fname)
         return fname
 
-    def rPlan(self, key: str):
+    def rPlan(self, key: str) ->List[str]:
+        tmp: List[str] = ['01']
         if key in self.Dataforplan.keys():
-            return self.Dataforplan[key]
-        else:
-            return None
+            tmp = self.Dataforplan[key]
+        return tmp
 
     def InitializationPlan(self):
         plan_d = rplan.plan.__members__

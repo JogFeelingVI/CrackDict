@@ -4,7 +4,7 @@
 # @Last Modified time: 2021-08-31 00:18:17
 import enum, pathlib as plib
 import itertools, functools, re, time
-from typing import Any
+from typing import Iterable, Any, Union
 from . import fmu
 import multiprocessing as multp
 
@@ -16,7 +16,7 @@ class plan(enum.Enum):
     T = '3456789'
     s = 'qwertyuiopasdfghjklzxcvbnm'
     S = 'QWERTYUIOPASDFGHJKLZXCVBNM'
-    f = '`~!@#$%^&*()_-+=[]{}\|;:,<.>/?'
+    f = r'`~!@#$%^&*()_-+=[]{}\|;:,<.>/?'
     p = 'bpmfdtnlgkhjqxrzcs'
     P = 'BPMFDTNLGKHJQXRZCS'
     h = 'ba,pa,ma,fa,da,tu,na,la,ga,ka,ha,zha,cha,sha,za,ca,sa,a,bo,po,mo,fo,o,me,de,te,ne,le,ge,ke,he,zhe,che,she,re,ze,ce,se,e,zhi,chi,shi,ri,zi,ci,si,er,bai,pai,mai,dai,tai,nai,lai,gai,kai,hai,zhai,chai,shai,zai,cai,sai,ai,bei,pei,mei,fei,dei,tei,nei,lei,gei,hei,zhei,shei,zei,ei,bao,pao,mao,dao,tao,nao,lao,gao,kao,hao,zhao,chao,shao,rao,zao,cao,sao,ao,pou,mou,fou,dou,tou,nou,lou,gou,kou,hou,zhou,chou,shou,rou,zou,cou,sou,ou,ban,pan,man,fan,dan,tan,nan,lan,gan,kan,han,zhan,chan,shan,ran,zan,can,san,an,ben,pen,men,fen,den,nen,gen,ken,hen,zhen,chen,shen,ren,zen,cen,sen,en,bang,pang,mang,fang,dang,tang,nang,lang,gang,kang,hang,zhang,chang,shang,rang,zang,cang,sang,ang,dong,tong,nong,long,gong,kong,hong,zhong,chong,rong,zong,cong,song,bi,pi,mi,di,ti,ni,li,ji,qi,xi,yi,dia,lia,jia,qia,xia,ya,bie,pie,mie,die,tie,nie,lie,jie,qie,xie,ye,biao,piao,miao,diao,tiao,niao,liao,jiao,qiao,xiao,yao,miu,diu,niu,liu,jiu,qiu,xiu,you,bian,pian,mian,dian,tian,nian,lian,jian,qian,xian,yan,bin,pin,min,nin,lin,jin,qin,xin,yin,niang,liang,jing,qiang,xiang,yang,bing,ping,ming,ding,ting,ning,ling,jing,qing,xing,ying,jiong,qiong,xiong,yong,bu,pu,mu,fu,du,tu,nu,lu,gu,ku,hu,zhu,chu,shu,ru,zu,cu,su,wu,gua,kua,hua,zhua,shua,wa,duo,tuo,nuo,luo,guo,kuo,huo,zhuo,chuo,shuo,ruo,zuo,cuo,suo,wo,guai,kuai,huai,zhuai,chuai,shuai,wai,dui,tui,gui,kui,hui,zhui,chui,shui,rui,zui,cui,sui,wei,duan,tuan,nuan,luan,guan,kuan,huan,zhuan,chuan,shuan,ruan,zuan,zuan,cuan,suan,wan,dun,tun,lun,gun,kun,hun,zhun,chun,shun,run,zun,cun,sun,wen,guang,kuang,huang,zhuang,chuang,shuang,wang,weng,nu,lu,ju,qu,xu,yu,nue,lue,jue,que,xue,yue,juan,quan,xuan,yuan,jun,qun,xun,yun'
@@ -27,7 +27,7 @@ def pathdat(path: str):
     try:
         import sys
         p = plib.Path(path).parent
-        data = plib.Path(p, 'phonedat/phone.py')
+        data = f'{plib.Path(p, "phonedat/phone.py")}'
         sys.path.append(data)
         import phonedat.phone
         ph = phonedat.phone.Phone()
@@ -36,7 +36,7 @@ def pathdat(path: str):
         return None
 
 
-def pathx(file: str) -> plib.PosixPath:
+def pathx(file: str) -> plib.Path:
     p = plib.Path(file).absolute()
     return p
 
@@ -56,7 +56,7 @@ class yieldxlis:
         self.pgcount = Total // pgsize
         self.pgsize = pgsize
 
-    def page(self) -> list:
+    def page(self) -> Iterable:
         '''
             Read Page
         '''
@@ -66,7 +66,7 @@ class yieldxlis:
 
 
 class logs_ex:
-    def __init__(self, text:str) -> None:
+    def __init__(self, text: str) -> None:
         self.T = text
 
     def __call__(self, func, *args: Any, **kwds: Any) -> Any:
@@ -75,25 +75,25 @@ class logs_ex:
             self.StoLog(func)
             retx = func(*args, **kwds)
             return retx
+
         return inner
-    
+
     def StoLog(self, func):
         logS = f'{time.localtime()} {self.T} {func.__name__}'
-        with open('./Logs.log', 'a+', 'utf-8') as wlogs:
+        with open(file='./Logs.log', mode='a+', encoding='utf-8') as wlogs:
             wlogs.write(logS)
 
 
 class wfileplus:
-    file = None
-    total = 0
     Minimum = 8
-    fmua = None
-    plus_fmu = None
     save = 0
     __STN = time.time()
     __PSN = time.time()
 
-    def __init__(self, file: plib.PosixPath, GPS: list, total: int) -> None:
+    #fmua
+    #plus_fmu
+
+    def __init__(self, file: plib.Path, GPS: list, total: int) -> None:
         self.file = file
         self.total = total
         self.yieldxlis = yieldxlis(total, GPS)
@@ -109,21 +109,20 @@ class wfileplus:
                   end='')
             self.__PSN = time.time()
 
-    
     def Compared_Zi_T(self, Zip_item: list):
         zi_str = self.jionStr(*Zip_item)
-        zi_str = self.filter_fmu(zi_str)
-        if zi_str != 'NULL':
-            zi_str = f'{zi_str}\n'
-        return zi_str
+        zi_fmu = self.filter_fmu(zi_str)
+        if zi_fmu != 'NULL':
+            zi_fmu = f'{zi_fmu}\n'
+        return zi_fmu
 
     def SaveAs(self, info: list):
         '''
         Save to File
         '''
         with self.file.open(mode='a', encoding='utf-8', buffering=4096) as wfs:
-            info = ''.join((f'{i}\n' for i in info))
-            wfs.write(info)
+            infox:str = ''.join((f'{i}\n' for i in info))
+            wfs.write(infox)
 
     def minpw(self, Vx: int = -1):
         if Vx == -1:
@@ -134,9 +133,9 @@ class wfileplus:
 
     def fmus(self, fl: list, lsof):
         self.fmua: list = fl
-        self.plus_fmu: fmu = fmu.fMoblieNumber(lsof)
+        self.plus_fmu = fmu.fMoblieNumber(lsof)
 
-    def jionStr(self, *lis):
+    def jionStr(self, *lis) -> str:
         fx = '{}' * lis.__len__()
         fxs = fx.format(*lis)
         return fxs if len(fxs) >= self.minpw() else 'NULL'
@@ -145,10 +144,11 @@ class wfileplus:
     #     for i, x in enumerate(self.xist):
     #         yield [i, self.jionStr(*x)]
 
-    def filter_fmu(self, xL) -> itertools.product:
+    def filter_fmu(self, xL:Union[int, str]) -> str:
+        Rx = xL
         if self.fmua != [] and self.plus_fmu != None:
-            xL = xL if self.plus_fmu.filter(xL, self.fmua) == True else 'NULL'
-        return xL
+            Rx = xL if self.plus_fmu.filter(xL, self.fmua) == True else 'NULL'
+        return f'{Rx}'
 
     def writeLc(self):
         Jie = self.yieldxlis.page()
