@@ -6,12 +6,9 @@ authors = ["JogFeelingVI <lifelse@outlook.com>"]
 license = "GPL3"
 
 [tool.poetry.dependencies]
-python = "^3.9"
-yapf = "^0.31.0"
-toml = "^0.10.2"
+python = "^3.11"
 
 [tool.poetry.dev-dependencies]
-yapf = "^0.31.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
